@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import './global.css'
+import { Link } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 
 const NavHeader = styled.div`
@@ -82,7 +84,16 @@ cursor: pointer;
 
 
 
+
 const NavBar = () => {
+
+
+  const navigate = useNavigate();
+
+  function handleClick(event) {
+
+    navigate('/Dashboard');
+  }
   return (
     <NavHeader>
         <NavLogo></NavLogo>
@@ -96,11 +107,10 @@ const NavBar = () => {
         </NavElementWrapper>
         <ExtraElementWarapper>
             <ButtonConnect><button class="button-86" role="button">Connect Wallet</button></ButtonConnect>
-            <UserLogo><img src="/Avatar.svg" alt="Logo" /></UserLogo>
-
+            <UserLogo onClick={handleClick}><img src="/Avatar.svg" alt="Logo" /></UserLogo>
             </ExtraElementWarapper>   
     </NavHeader>
-    
+  
   )
 }
 

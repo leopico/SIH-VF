@@ -26,6 +26,9 @@ flex: 3;
 const FlexDiv3 = styled.div`
 flex: 3;`
 
+const TextContainer = styled.div`
+    width: 100%;
+    height: 100%;`
 
 
     
@@ -36,7 +39,7 @@ function About() {
   return (
     <Section>
       <Container>
-        <FlexDiv1>he,llo</FlexDiv1>
+        <FlexDiv1></FlexDiv1>
         <FlexDiv2>adadad</FlexDiv2>
         <FlexDiv3>adada</FlexDiv3>
       </Container>
