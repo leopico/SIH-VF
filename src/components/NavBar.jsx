@@ -13,7 +13,7 @@ height: 100px;
   align-items: center;
 
 
-  /* background-color: #a10000; */
+  background-color: transparent;
   `
 
   const NavLogo = styled.div`
@@ -22,6 +22,7 @@ height: 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     /* background-color: #cfc0c0; */
     background-image: url('/logo.png');
     `
