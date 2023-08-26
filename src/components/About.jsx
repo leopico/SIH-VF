@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Contribute from './Contribute'
 
 
 const Section = styled.div`
@@ -17,12 +18,12 @@ width: auto;
 height: 100%;
 /* background-color: #5e5e49; */
 display: flex;
-justify-content: center;
+justify-content: flex-start;
 align-items: center;
 `
 
 const Container1TextWrapper = styled.div`
-width: 70%;
+width: 50%;
 height: 90%;
 background-color: #20361a53;
 display: flex;
@@ -128,6 +129,14 @@ height: 100%;
 display: flex;
 justify-content: center;
 align-items: center;
+
+iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
 `;
 
 
@@ -146,8 +155,11 @@ function About() {
   </Container2Div1>
   <Container2Div2>Virtual forest is a web-based game that enables users to plant trees in the real world, while sitting on couch or work-desk! </Container2Div2>
 </Container2>
-<Container3>3D model Goes Here</Container3>
+<Container3>
+  3D Model Goes Here
+      </Container3>
 </Section>
+<Contribute />
 </>  
 )
 }

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import NavBar from './NavBar'
 import About from './About'
 
+
 const Section = styled.div`
 width: 100%;
 height: 760px;
@@ -140,7 +141,6 @@ function Hero() {
         </WriteWrapper>   
     </Section>
     <About />
-
     </>
   )
   }
