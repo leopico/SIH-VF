@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Collectibles from './Collectibles';
 
 const Section = styled.div`
 height: 100vh;
@@ -273,7 +274,7 @@ function Contribute() {
       </RightBanner>
   <LeftBanner>Contribute</LeftBanner></MapSection>
 </Section>
-
+<Collectibles/>
 </>
   )
 }
