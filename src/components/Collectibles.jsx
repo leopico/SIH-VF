@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const Section = styled.div`
   height: 100vh;
@@ -29,8 +29,32 @@ const DivLeftTop = styled.div`
   flex-direction: row;
 `;
 
+//Animation for underline effect
+const underlineAnimation = keyframes`
+from {
+  width: 0;
+}
+to {
+  width: 100%;
+}
+`;
+
 const DivLeftTopItem = styled.div`
   flex: 1;
+  cursor: pointer;
+  color: #fff;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-family: "inter", sans-serif;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 100;
+
+  &:hover {
+    text-decoration: underline #cee963;
+    font-weight: 700;
+  }
 `;
 
 const DivLeftItemWrapper = styled.div`
@@ -53,18 +77,42 @@ const DivLLeftItem1 = styled.div`
 
 const DivLeftItemImage = styled.div`
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    max-width: 50%;
+    max-height: 50%;
+  }
 `;
 
 const DivLeftItemTextWrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 10px;
 `;
 const DivLeftItemTextHeading = styled.div`
   flex: 1;
+  font-family: "inter", sans-serif;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  letter-spacing: 4px;
 `;
 const DivLeftItemText = styled.div`
   flex: 1;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-size: 12px;
+  font-family: "inter", sans-serif;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 2px;
 `;
 
 const DivLeftItem2 = styled.div`
@@ -88,33 +136,83 @@ const DivRight = styled.div`
 
 const DivRightLeftHeading = styled.div`
   flex: 1;
+  height: 96%;
+  max-width: 104px;
+  flex: 1;
+  background-color: #20361a53;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: transparent;
+  border: 2px solid #ffffff;
+  border-radius: 102px;
+  //Typography
+  text-align: center;
+  writing-mode: vertical-rl;
+  font-family: "inter", sans-serif;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 25px;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #ffffff;
 `;
 
 const DivRightRightWrapper = styled.div`
   flex: 5;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 const DivRightHeading = styled.div`
   flex: 1;
   display: flex;
+  //Typography
+  font-family: "inter", sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 7.04px;
 `;
 
 const DivRightModelWrapper = styled.div`
   flex: 5;
   display: flex;
+  min-height: 370px;
+  align-items: center;
 `;
 
 const DivParagraph = styled.div`
+  padding: 12px 12px 12px 12px;
   flex: 1;
   display: flex;
+  font-size: 12px;
+  font-family: "inter", sans-serif;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 2px;
 `;
 
 const DivRightButton = styled.div`
   flex: 1;
   display: flex;
+  cursor: pointer;
+  width: 100px;
+  height: 25px;
+  font-size: 12px;
+  font-family: "inter", sans-serif;
+  border-radius: 20px;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+  background: #cee963;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border: none;
+  color: #3d4917;
+  min-height: 24px;
 `;
 
 function Collectibles() {
@@ -128,21 +226,27 @@ function Collectibles() {
           </DivLeftTop>
           <DivLeftItemWrapper>
             <DivLLeftItem1>
-              <DivLeftItemImage>Icon Here</DivLeftItemImage>
+              <DivLeftItemImage>
+                <img src="/Component11.svg" />
+              </DivLeftItemImage>
               <DivLeftItemTextWrapper>
                 <DivLeftItemTextHeading>Seed</DivLeftItemTextHeading>
                 <DivLeftItemText>Day05</DivLeftItemText>
               </DivLeftItemTextWrapper>
             </DivLLeftItem1>
             <DivLeftItem2>
-              <DivLeftItemImage>Image Here</DivLeftItemImage>
+              <DivLeftItemImage>
+                <img src="/Component12.svg" />
+              </DivLeftItemImage>
               <DivLeftItemTextWrapper>
                 <DivLeftItemTextHeading>Sapling</DivLeftItemTextHeading>
                 <DivLeftItemText>Day05</DivLeftItemText>
               </DivLeftItemTextWrapper>
             </DivLeftItem2>
             <DivLLeftItem1>
-              <DivLeftItemImage>Image Here</DivLeftItemImage>
+              <DivLeftItemImage>
+                <img src="/Component13.svg" />
+              </DivLeftItemImage>
               <DivLeftItemTextWrapper>
                 <DivLeftItemTextHeading>Tree</DivLeftItemTextHeading>
                 <DivLeftItemText>Day05</DivLeftItemText>
