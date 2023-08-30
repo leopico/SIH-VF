@@ -48,13 +48,13 @@ const GeneralSectionDiv = styled.div`
 `;
 const GenralSectionIcon = styled.div`
   height: 100%;
-  flex: 1;
+  flex: 2;
   align-items: center;
   justify-content: center;
   display: flex;
 
   img {
-    max-width: 90%;
+    max-width: 60%;
     max-height: 90%;
   }
 `;
@@ -64,8 +64,8 @@ const GenralSectionMsg = styled.div`
   width: 100%;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 10px;
+  font-weight: 100;
   font-family: "inter", sans-serif;
   color: #ffff;
 `;
@@ -79,6 +79,7 @@ const GeneralSectionDivDiv1 = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  letter-spacing: 4px;
 `;
 
 const GeneralSectionDivDivWrapper = styled.div``;
@@ -93,6 +94,8 @@ const GeneralSectionDivDiv2 = styled.div`
   justify-content: center;
   align-items: flex-start;
   max-height: 32px;
+  letter-spacing: 2px;
+  font-weight: 100;
 `;
 
 const GeneralSectionDivDiv3 = styled.div`
@@ -105,11 +108,11 @@ const DivDivsubButton = styled.div`
   cursor: pointer;
   display: flex;
   min-width: 40px;
-  max-height: 40px;
+  max-height: 32px;
   align-items: center;
   justify-content: center;
   color: white;
-  border: 1px solid white;
+  border: 2px solid white;
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
   flex: 1;
@@ -123,14 +126,15 @@ const DivDivAddButton = styled.div`
   cursor: pointer;
   display: flex;
   min-width: 40px;
-  max-height: 40px;
+  max-height: 32px;
   align-items: center;
   justify-content: center;
   color: white;
-  border: 1px solid white;
+  border: 2px solid white;
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
   flex: 1;
+  font-weight: 800;
   &:hover {
     color: white;
     background-color: #cee963;
@@ -140,19 +144,22 @@ const DivDivAddButton = styled.div`
 const DivDivValue = styled.div`
   display: flex;
   min-width: 42px;
-  max-height: 40px;
+  max-height: 32px;
   align-items: center;
   justify-content: center;
   color: white;
-  border: 1px solid white;
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
   flex: 2;
+  font-weight: 400;
+  font-family: "inter", sans-serif;
 `;
 
 const GeneralSectionDivDiv3Button = styled.button`
   cursor: pointer;
   width: 140px;
   height: 40px;
-  font-size: 16px;
+  font-size: 14px;
   font-family: "inter", sans-serif;
   border-radius: 20px;
   opacity: 0.9;
@@ -160,6 +167,8 @@ const GeneralSectionDivDiv3Button = styled.button`
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   border: none;
   color: #3d4917;
+  font-weight: 700;
+  letter-spacing: 2px;
 `;
 
 const GeneralSectionDivDiv4 = styled.div`
@@ -220,12 +229,14 @@ const ModeChanger = styled.div`
 const ModeChangerDiv = styled.div`
   flex: 1;
   cursor: pointer;
+  max-width: 120px;
   padding: 10px 50px 10px 50px;
   color: #fff;
   text-align: center;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   font-family: "inter", sans-serif;
   font-size: 18px;
+  letter-spacing: 2px;
   font-weight: 200;
   &:hover {
     font-weight: 700;
@@ -305,7 +316,7 @@ function Contribute() {
             </GenralSectionIcon>
           </GenralSectionWrapper>
 
-          <GenralSectionMsg>All Proceedings go to NGOs</GenralSectionMsg>
+          {/* <GenralSectionMsg>All Proceedings go to NGOs</GenralSectionMsg> */}
         </GeneralSection>
         <MapSection>
           <RightBanner>

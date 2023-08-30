@@ -201,9 +201,9 @@ const DivRightButton = styled.div`
   flex: 1;
   display: flex;
   cursor: pointer;
-  width: 100px;
+  width: 142px;
   height: 25px;
-  font-size: 12px;
+  font-size: 16px;
   font-family: "inter", sans-serif;
   border-radius: 20px;
   align-items: center;
@@ -213,7 +213,9 @@ const DivRightButton = styled.div`
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   border: none;
   color: #3d4917;
-  min-height: 24px;
+  min-height: 42px;
+  font-weight: 600;
+  letter-spacing: 2px;
 `;
 
 function Collectibles() {
