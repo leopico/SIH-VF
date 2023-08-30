@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Collectibles from "./Collectibles";
+import Landing from "../landing.jsx";
 
 const Section = styled.div`
   height: 100vh;
@@ -324,7 +325,9 @@ function Contribute() {
               <ModeChangerDiv>User Map</ModeChangerDiv>
               <ModeChangerDiv>World Map</ModeChangerDiv>
             </ModeChanger>
-            <ThreeMapModel>3D Model Goes Here</ThreeMapModel>
+            <ThreeMapModel>
+              <Landing />
+            </ThreeMapModel>
           </RightBanner>
           <LeftBanner>Contribute</LeftBanner>
         </MapSection>
