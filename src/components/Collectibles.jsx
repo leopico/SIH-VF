@@ -8,6 +8,7 @@ const Section = styled.div`
   justify-content: center;
   display: flex;
   flex-direction: row;
+  background: linear-gradient(#6d9061, #47613b);
 `;
 
 //Left Side of Page

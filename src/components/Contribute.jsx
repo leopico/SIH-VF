@@ -9,7 +9,7 @@ const Section = styled.div`
   justify-content: center;
   display: flex;
   flex-direction: row;
-  /* background-color: #3D4917; */
+  background: linear-gradient(#95ba85, #6d9061);
 `;
 
 // const Container = styled.div`
@@ -76,13 +76,23 @@ const GeneralSectionDivDiv1 = styled.div`
   font-weight: 700;
   font-family: "inter", sans-serif;
   color: #ffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
+
+const GeneralSectionDivDivWrapper = styled.div``;
+
 const GeneralSectionDivDiv2 = styled.div`
   font-weight: 400;
   font-size: 16px;
   font-family: "inter", sans-serif;
   color: #ffff;
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-height: 32px;
 `;
 
 const GeneralSectionDivDiv3 = styled.div`
@@ -94,8 +104,8 @@ const GeneralSectionDivDiv3 = styled.div`
 const DivDivsubButton = styled.div`
   cursor: pointer;
   display: flex;
-  min-width: 25px;
-  max-height: 25px;
+  min-width: 40px;
+  max-height: 40px;
   align-items: center;
   justify-content: center;
   color: white;
@@ -112,8 +122,8 @@ const DivDivsubButton = styled.div`
 const DivDivAddButton = styled.div`
   cursor: pointer;
   display: flex;
-  min-width: 25px;
-  max-height: 25px;
+  min-width: 40px;
+  max-height: 40px;
   align-items: center;
   justify-content: center;
   color: white;
@@ -129,8 +139,8 @@ const DivDivAddButton = styled.div`
 
 const DivDivValue = styled.div`
   display: flex;
-  min-width: 36px;
-  max-height: 25px;
+  min-width: 42px;
+  max-height: 40px;
   align-items: center;
   justify-content: center;
   color: white;
@@ -140,9 +150,9 @@ const DivDivValue = styled.div`
 
 const GeneralSectionDivDiv3Button = styled.button`
   cursor: pointer;
-  width: 100px;
-  height: 25px;
-  font-size: 12px;
+  width: 140px;
+  height: 40px;
+  font-size: 16px;
   font-family: "inter", sans-serif;
   border-radius: 20px;
   opacity: 0.9;
@@ -247,7 +257,9 @@ function Contribute() {
                 <DivDivAddButton>+</DivDivAddButton>
               </GeneralSectionDivDiv3>
               <GeneralSectionDivDiv4>
-                <GeneralSectionDivDiv3Button>Hello</GeneralSectionDivDiv3Button>
+                <GeneralSectionDivDiv3Button>
+                  Plant Seed
+                </GeneralSectionDivDiv3Button>
               </GeneralSectionDivDiv4>
             </GeneralSectionDiv>
             <GenralSectionIcon>
@@ -264,7 +276,9 @@ function Contribute() {
                 <DivDivAddButton>+</DivDivAddButton>
               </GeneralSectionDivDiv3>
               <GeneralSectionDivDiv4>
-                <GeneralSectionDivDiv3Button>Hello</GeneralSectionDivDiv3Button>
+                <GeneralSectionDivDiv3Button>
+                  Water Plant
+                </GeneralSectionDivDiv3Button>
               </GeneralSectionDivDiv4>
             </GeneralSectionDiv>
             <GenralSectionIcon>
@@ -281,7 +295,9 @@ function Contribute() {
                 <DivDivAddButton>+</DivDivAddButton>
               </GeneralSectionDivDiv3>
               <GeneralSectionDivDiv4>
-                <GeneralSectionDivDiv3Button>Hello</GeneralSectionDivDiv3Button>
+                <GeneralSectionDivDiv3Button>
+                  Speed Up
+                </GeneralSectionDivDiv3Button>
               </GeneralSectionDivDiv4>
             </GeneralSectionDiv>
             <GenralSectionIcon>
