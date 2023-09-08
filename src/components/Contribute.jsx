@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import Collectibles from "./Collectibles";
 import Landing from "../landing.jsx";
@@ -257,7 +256,7 @@ const ThreeMapModel = styled.div`
 function Contribute() {
   return (
     <>
-      <Section>
+      <Section id="contribute">
         <GeneralSection>
           <GenralSectionWrapper>
             <GeneralSectionDiv>
