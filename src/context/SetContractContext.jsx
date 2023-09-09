@@ -111,46 +111,55 @@ export const SetContractContextProvider = (props) => {
   };
 
   const applyManure = async (setManureLoader) => {
-    const manToken = await connectWithManTokenContract();
-    const vfContract = await connectWithContract();
-    // console.log(manToken, vfContract);
     try {
       if (!profileId) {
         await handleAuth(setManureLoader);
-      } else if (!manToken) {
+        return;
+      }
+
+      const manToken = await connectWithManTokenContract();
+      // console.log(manToken);
+      if (!manToken) {
         setMessage({
           type: "error",
           message: "MAN token contract not initialized.",
         });
         return;
-      } else {
-        setManureLoader(true);
-        const balance = await manToken.balanceOf(address);
-        if (balance.lt(ethers.utils.parseEther("1"))) {
-          setMessage({
-            type: "error",
-            message: "Insufficient MAN tokens.",
-          });
-          return;
-        }
-        const approveTx = await manToken.approve(
-          contractAddress,
-          ethers.utils.parseEther("1")
-        );
-        await approveTx.wait();
-        const tx = await vfContract.applyManure();
-        await tx.wait();
-        setManureLoader(false);
-        setMessage({
-          type: "success",
-          message: "Manure added!",
-        });
       }
+
+      setManureLoader(true);
+      const balance = await manToken.balanceOf(address);
+      console.log("Balance:", balance.toString());
+
+      if (balance.lt(ethers.utils.parseEther("1"))) {
+        setMessage({
+          type: "error",
+          message: "Insufficient MAN tokens.",
+        });
+        return;
+      }
+
+      const approveTx = await manToken.approve(
+        contractAddress,
+        ethers.utils.parseEther("1")
+      );
+      await approveTx.wait();
+
+      const vfContract = await connectWithContract();
+      const tx = await vfContract.applyManure();
+      await tx.wait();
+
+      setManureLoader(false);
+      setMessage({
+        type: "success",
+        message: "Manure added!",
+      });
     } catch (error) {
+      console.error("Error:", error);
       setManureLoader(false);
       setMessage({
         type: "error",
-        message: "You can't add manure properly!",
+        message: "Failed to add manure. Please try again.",
       });
     }
   };

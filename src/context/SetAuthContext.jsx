@@ -114,6 +114,7 @@ export const SetAuthContextProvider = (props) => {
         signOut,
         addr,
         profileId,
+        address,
       }}
     >
       {props.children}
