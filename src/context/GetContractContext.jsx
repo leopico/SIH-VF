@@ -42,6 +42,7 @@ export const GetContractContextProvider = (props) => {
         console.log(error);
       }
     };
+
     getOwner();
   }, []);
 
