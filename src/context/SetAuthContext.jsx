@@ -1,4 +1,3 @@
-// import { ethers } from "ethers";
 import { hostServer } from "./Constant";
 import { createContext, useEffect, useState } from "react";
 import { useContext } from "react";
@@ -11,23 +10,10 @@ import { useAccount, useConnect, useSignMessage, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import axios from "axios";
 
-// const connectWithContract = async () => {
-//   try {
-//     const provider = new ethers.providers.Web3Provider(window.ethereum);
-//     const signer = provider.getSigner();
-//     const contract = new ethers.Contract(contractAddress, contractAbi, signer);
-
-//     return contract;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
 //create context for this SetDataContext
+const SetAuthContext = createContext();
 
-const SetDataContext = createContext();
-
-export const SetDataContextProvider = (props) => {
+export const SetAuthContextProvider = (props) => {
   const { setMessage } = useContext(MessageContext);
 
   //set cookies coming from backend side of user object
@@ -95,7 +81,7 @@ export const SetDataContextProvider = (props) => {
         setLoader(false);
         setMessage({
           type: "success",
-          message: "You are authenticated!",
+          message: "You have authenticated!",
         });
       })
       .catch((err) => {
@@ -122,7 +108,7 @@ export const SetDataContextProvider = (props) => {
   }, [cookies.session]);
 
   return (
-    <SetDataContext.Provider
+    <SetAuthContext.Provider
       value={{
         handleAuth,
         signOut,
@@ -131,13 +117,13 @@ export const SetDataContextProvider = (props) => {
       }}
     >
       {props.children}
-    </SetDataContext.Provider>
+    </SetAuthContext.Provider>
   );
 };
 
 // Define the propTypes for MessageContextProvider
-SetDataContextProvider.propTypes = {
+SetAuthContextProvider.propTypes = {
   children: PropTypes.node.isRequired, // Ensure children is provided and is a node
 };
 
-export default SetDataContext;
+export default SetAuthContext;

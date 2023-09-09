@@ -2,9 +2,9 @@ import styled from "styled-components";
 import "./global.css";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
-import SetDataContext from "../context/SetDataContext";
 import MessageContext from "../context/MessageContext";
 import Loader from "./Loader";
+import SetAuthContext from "../context/SetAuthContext";
 
 const NavHeader = styled.div`
   width: 100%;
@@ -87,7 +87,7 @@ const NavBar = () => {
   const { setMessage } = useContext(MessageContext);
 
   //fetch context from SetDataContext
-  const { handleAuth, signOut, profileId } = useContext(SetDataContext);
+  const { handleAuth, signOut, profileId } = useContext(SetAuthContext);
 
   async function handleDashboard() {
     if (profileId) {

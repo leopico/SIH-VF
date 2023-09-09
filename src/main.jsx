@@ -8,7 +8,9 @@ import { createConfig, configureChains, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { mainnet } from "wagmi/chains";
 import { MessageContextProvider } from "./context/MessageContext";
-import { SetDataContextProvider } from "./context/SetDataContext";
+import { SetAuthContextProvider } from "./context/SetAuthContext";
+import { SetContractContextProvider } from "./context/SetContractContext";
+import { GetContractContextProvider } from "./context/GetContractContext";
 
 const { publicClient, webSocketPublicClient } = configureChains(
   [mainnet],
@@ -28,11 +30,15 @@ root.render(
   <StrictMode>
     <WagmiConfig config={config}>
       <MessageContextProvider>
-        <SetDataContextProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </SetDataContextProvider>
+        <SetAuthContextProvider>
+          <SetContractContextProvider>
+            <GetContractContextProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </GetContractContextProvider>
+          </SetContractContextProvider>
+        </SetAuthContextProvider>
       </MessageContextProvider>
     </WagmiConfig>
   </StrictMode>

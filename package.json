@@ -25,7 +25,8 @@
     "three": "^0.155.0",
     "viem": "^1.10.7",
     "vite-plugin-string": "^1.2.1",
-    "wagmi": "^1.4.1"
+    "wagmi": "^1.4.1",
+    "web3modal": "^1.9.12"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

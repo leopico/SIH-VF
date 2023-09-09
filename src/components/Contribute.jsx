@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import Collectibles from "./Collectibles";
 import Landing from "../landing.jsx";
+import { useContext, useState } from "react";
+import SetContractContext from "../context/SetContractContext";
+import Loader from "./Loader";
 
 const Section = styled.div`
   height: 100vh;
@@ -254,6 +257,9 @@ const ThreeMapModel = styled.div`
 `;
 
 function Contribute() {
+  const [loader, setLoader] = useState(false);
+  //take contract set function from SetContractContext
+  const { getSeed } = useContext(SetContractContext);
   return (
     <>
       <Section id="contribute">
@@ -268,8 +274,9 @@ function Contribute() {
                 <DivDivAddButton>+</DivDivAddButton>
               </GeneralSectionDivDiv3>
               <GeneralSectionDivDiv4>
-                <GeneralSectionDivDiv3Button>
-                  Plant Seed
+                <GeneralSectionDivDiv3Button onClick={() => getSeed(setLoader)}>
+                  {loader && <Loader />}{" "}
+                  <span style={{ marginLeft: "5px" }}>Plant Seed</span>
                 </GeneralSectionDivDiv3Button>
               </GeneralSectionDivDiv4>
             </GeneralSectionDiv>
