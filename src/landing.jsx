@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import * as THREE from "three";
 import vertexShader from "./shaders/vertex.glsl";
 import fragmentShader from "./shaders/fragment.glsl";

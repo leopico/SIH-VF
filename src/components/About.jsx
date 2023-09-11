@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import Contribute from "./Contribute";
 
@@ -138,6 +137,18 @@ const Container3 = styled.div`
   }
 `;
 
+const ThreeMapModel = styled.div`
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledImage = styled.img`
+  width: 50vh;
+  height: 30vh;
+`;
+
 function About() {
   return (
     <>
@@ -164,7 +175,11 @@ function About() {
             in the real world, while sitting on couch or work-desk!{" "}
           </Container2Div2>
         </Container2>
-        <Container3>3D Model Goes Here</Container3>
+        <Container3>
+          <ThreeMapModel>
+            <StyledImage src="/TreeNFT.gif" alt="upcomingTree" />
+          </ThreeMapModel>
+        </Container3>
       </Section>
       <Contribute />
     </>

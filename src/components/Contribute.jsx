@@ -285,11 +285,11 @@ function Contribute() {
             <GeneralSectionDiv>
               <GeneralSectionDivDiv1>Seed Bag</GeneralSectionDivDiv1>
               <GeneralSectionDivDiv2>Refills Everyday</GeneralSectionDivDiv2>
-              <GeneralSectionDivDiv3>
+              {/* <GeneralSectionDivDiv3>
                 <DivDivsubButton>-</DivDivsubButton>
                 <DivDivValue>1</DivDivValue>
                 <DivDivAddButton>+</DivDivAddButton>
-              </GeneralSectionDivDiv3>
+              </GeneralSectionDivDiv3> */}
               <GeneralSectionDivDiv4>
                 <GeneralSectionDivDiv3Button onClick={() => getSeed(setLoader)}>
                   {loader && <Loader />}{" "}
@@ -338,7 +338,9 @@ function Contribute() {
           <GenralSectionWrapper>
             <GeneralSectionDiv>
               <GeneralSectionDivDiv1>Maunre Bag</GeneralSectionDivDiv1>
-              <GeneralSectionDivDiv2>No need to add tokenId so far</GeneralSectionDivDiv2>
+              <GeneralSectionDivDiv2>
+                No need to add tokenId so far
+              </GeneralSectionDivDiv2>
               {/* <GeneralSectionDivDiv3>
                 <DivDivsubButton>-</DivDivsubButton>
                 <DivDivValue>1</DivDivValue>

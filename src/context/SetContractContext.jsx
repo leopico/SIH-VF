@@ -179,8 +179,33 @@ export const SetContractContextProvider = (props) => {
     }
   };
 
+  const handleMint = async (setMintLoader) => {
+    try {
+      if (!profileId) {
+        await handleAuth(setMintLoader);
+      }
+      setMintLoader(true);
+      setTimeout(() => {
+        setMessage({
+          type: "success",
+          message: "Your Seed is not ready to become Tree  NFT",
+        });
+        setMintLoader(false);
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+      setMintLoader(false);
+      setMessage({
+        type: "error",
+        message: "Failed to mint NFT!",
+      });
+    }
+  };
+
   return (
-    <SetContractContext.Provider value={{ getSeed, giveWater, applyManure }}>
+    <SetContractContext.Provider
+      value={{ getSeed, giveWater, applyManure, handleMint }}
+    >
       {props.children}
     </SetContractContext.Provider>
   );
