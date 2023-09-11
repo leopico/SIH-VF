@@ -271,7 +271,8 @@ const ThreeMapModel = styled.div`
 function Contribute() {
   const [loader, setLoader] = useState(false);
   const [waterLoader, setWaterLoader] = useState(false);
-  const [selectedTokenId, setSelectedTokenId] = useState("");
+  const [selectedWaterTokenId, setSelectedWaterTokenId] = useState("");
+  const [selectedManureTokenId, setSelectedManureTokenId] = useState("");
   const [manureLoader, setManureLoader] = useState(false);
   //take contract set function from SetContractContext
   const { getSeed, giveWater, applyManure } = useContext(SetContractContext);
@@ -312,16 +313,16 @@ function Contribute() {
               <StyledInput
                 type="number"
                 placeholder="Enter Token Id"
-                value={selectedTokenId}
-                onChange={(e) => setSelectedTokenId(e.target.value)}
+                value={selectedWaterTokenId}
+                onChange={(e) => setSelectedWaterTokenId(e.target.value)}
               />
               <GeneralSectionDivDiv4>
                 <GeneralSectionDivDiv3Button
                   onClick={() =>
                     giveWater(
                       setWaterLoader,
-                      selectedTokenId,
-                      setSelectedTokenId
+                      selectedWaterTokenId,
+                      setSelectedWaterTokenId
                     )
                   }
                 >
@@ -337,15 +338,27 @@ function Contribute() {
           <GenralSectionWrapper>
             <GeneralSectionDiv>
               <GeneralSectionDivDiv1>Maunre Bag</GeneralSectionDivDiv1>
-              <GeneralSectionDivDiv2>Refills</GeneralSectionDivDiv2>
-              <GeneralSectionDivDiv3>
+              <GeneralSectionDivDiv2>No need to add tokenId so far</GeneralSectionDivDiv2>
+              {/* <GeneralSectionDivDiv3>
                 <DivDivsubButton>-</DivDivsubButton>
                 <DivDivValue>1</DivDivValue>
                 <DivDivAddButton>+</DivDivAddButton>
-              </GeneralSectionDivDiv3>
+              </GeneralSectionDivDiv3> */}
+              <StyledInput
+                type="number"
+                placeholder="Enter Token Id"
+                value={selectedManureTokenId}
+                onChange={(e) => setSelectedManureTokenId(e.target.value)}
+              />
               <GeneralSectionDivDiv4>
                 <GeneralSectionDivDiv3Button
-                  onClick={() => applyManure(setManureLoader)}
+                  onClick={() =>
+                    applyManure(
+                      setManureLoader,
+                      selectedManureTokenId,
+                      setSelectedManureTokenId
+                    )
+                  }
                 >
                   {manureLoader && <Loader />}{" "}
                   <span style={{ marginLeft: "5px" }}>Speed up</span>

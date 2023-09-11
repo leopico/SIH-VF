@@ -1,7 +1,7 @@
 import Contract from "../blockchain/contract/VF.json"; //have to change
 import MANTokenContract from "../blockchain/contract/MANToken.json";
 
-export const contractAddress = "0xA23214b28c71D2c53009829556360756b9535db0"; //have to change
+export const contractAddress = "0xb4d66Cb1665A1249ED3cdF4546fFa3205a3Fd795"; //have to change
 export const contractAbi = Contract.abi;
 
 export const manTokenContractAddress =

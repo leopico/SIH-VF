@@ -1,5 +1,5 @@
 import Web3Modal from "web3modal";
-import { Contract, ethers } from "ethers";
+import { Contract, ethers, formatEther, parseEther } from "ethers";
 import { createContext, useContext } from "react";
 import PropTypes from "prop-types";
 import {
@@ -76,13 +76,13 @@ export const SetContractContextProvider = (props) => {
   //interact with contract to giving the water
   const giveWater = async (
     setWaterLoader,
-    selectedTokenId,
-    setSelectedTokenId
+    selectedWaterTokenId,
+    setSelectedWaterTokenId
   ) => {
     try {
       if (!profileId) {
         await handleAuth(setWaterLoader);
-      } else if (!selectedTokenId) {
+      } else if (!selectedWaterTokenId) {
         setMessage({
           type: "error",
           message: "You do not have tokenId",
@@ -91,10 +91,10 @@ export const SetContractContextProvider = (props) => {
       } else {
         setWaterLoader(true);
         const contract = await connectWithContract();
-        const getwater = await contract.giveWater(selectedTokenId);
+        const getwater = await contract.giveWater(selectedWaterTokenId);
         await getwater.wait();
         //here we go to store requirements data into our database
-        setSelectedTokenId("");
+        setSelectedWaterTokenId("");
         setWaterLoader(false);
         setMessage({
           type: "success",
@@ -110,7 +110,13 @@ export const SetContractContextProvider = (props) => {
     }
   };
 
-  const applyManure = async (setManureLoader) => {
+  const minBalanceEther = 1;
+
+  const applyManure = async (
+    setManureLoader,
+    selectedManureTokenId,
+    setSelectedManureTokenId
+  ) => {
     try {
       if (!profileId) {
         await handleAuth(setManureLoader);
@@ -128,32 +134,41 @@ export const SetContractContextProvider = (props) => {
       }
 
       setManureLoader(true);
-      const balance = await manToken.balanceOf(address);
-      console.log("Balance:", balance.toString());
+      const balanceWei = await manToken.balanceOf(address);
+      const balanceEther = formatEther(balanceWei);
+      // console.log(`Balance of ${address}: ${balanceEther} ETH`);
 
-      if (balance.lt(ethers.utils.parseEther("1"))) {
+      if (parseFloat(balanceEther) > minBalanceEther) {
+        const approveTx = await manToken.approve(
+          contractAddress,
+          parseEther("1")
+        );
+        await approveTx.wait();
+        setMessage({
+          type: "success",
+          message: "Approved manure token!",
+        });
+
+        //this is only view function and we can not wait for this transcation
+        //so that we can not apply manure in VF
+        const vfContract = await connectWithContract();
+        await vfContract.applyManure(selectedManureTokenId);
+        // await tx.wait();
+        setSelectedManureTokenId("");
+        setManureLoader(false);
+        setMessage({
+          type: "success",
+          message: "Manure added!",
+        });
+      } else {
+        setSelectedManureTokenId("");
+        setManureLoader(false);
+        // Balance is not greater than 1 ETH, you can take another action here
         setMessage({
           type: "error",
-          message: "Insufficient MAN tokens.",
+          message: "You don't have enought manure!",
         });
-        return;
       }
-
-      const approveTx = await manToken.approve(
-        contractAddress,
-        ethers.utils.parseEther("1")
-      );
-      await approveTx.wait();
-
-      const vfContract = await connectWithContract();
-      const tx = await vfContract.applyManure();
-      await tx.wait();
-
-      setManureLoader(false);
-      setMessage({
-        type: "success",
-        message: "Manure added!",
-      });
     } catch (error) {
       console.error("Error:", error);
       setManureLoader(false);
