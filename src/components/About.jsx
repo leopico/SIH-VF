@@ -145,8 +145,8 @@ const ThreeMapModel = styled.div`
 `;
 
 const StyledImage = styled.img`
-  width: 50vh;
-  height: 30vh;
+  width: 70vh;
+  height: 50vh;
 `;
 
 function About() {
@@ -177,7 +177,7 @@ function About() {
         </Container2>
         <Container3>
           <ThreeMapModel>
-            <StyledImage src="/TreeNFT.gif" alt="upcomingTree" />
+            <StyledImage src="/about_image.png" alt="upcomingTree" />
           </ThreeMapModel>
         </Container3>
       </Section>
