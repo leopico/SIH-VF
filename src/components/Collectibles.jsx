@@ -1,5 +1,7 @@
-import React from "react";
+import { useContext, useState } from "react";
 import styled, { keyframes } from "styled-components";
+import SetContractContext from "../context/SetContractContext";
+import Loader from "./Loader";
 
 const Section = styled.div`
   height: 100vh;
@@ -218,7 +220,23 @@ const DivRightButton = styled.div`
   letter-spacing: 2px;
 `;
 
+const ThreeMapModel = styled.div`
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledImage = styled.img`
+  width: 70%;
+  border-radius: 50%;
+`;
+
 function Collectibles() {
+  const [mintLoader, setMintLoader] = useState(false);
+  //take fun from useContext of SetContract
+  const { handleMint } = useContext(SetContractContext);
+
   return (
     <>
       <Section>
@@ -243,7 +261,7 @@ function Collectibles() {
               </DivLeftItemImage>
               <DivLeftItemTextWrapper>
                 <DivLeftItemTextHeading>Sapling</DivLeftItemTextHeading>
-                <DivLeftItemText>Day05</DivLeftItemText>
+                <DivLeftItemText>Day10</DivLeftItemText>
               </DivLeftItemTextWrapper>
             </DivLeftItem2>
             <DivLLeftItem1>
@@ -252,7 +270,7 @@ function Collectibles() {
               </DivLeftItemImage>
               <DivLeftItemTextWrapper>
                 <DivLeftItemTextHeading>Tree</DivLeftItemTextHeading>
-                <DivLeftItemText>Day05</DivLeftItemText>
+                <DivLeftItemText>Day15</DivLeftItemText>
               </DivLeftItemTextWrapper>
             </DivLLeftItem1>
           </DivLeftItemWrapper>
@@ -261,7 +279,11 @@ function Collectibles() {
           <DivRightLeftHeading>Collectibles</DivRightLeftHeading>
           <DivRightRightWrapper>
             <DivRightHeading>TreeNFT</DivRightHeading>
-            <DivRightModelWrapper>Model Here</DivRightModelWrapper>
+            <DivRightModelWrapper>
+              <ThreeMapModel>
+                <StyledImage src="/TreeNFT.gif" alt="upcomingTree" />
+              </ThreeMapModel>
+            </DivRightModelWrapper>
             <DivParagraph>
               The virtual twin of a real world sapling planted by your efforts
               and contributions. This sapling would be geotagged and its updates
@@ -269,7 +291,10 @@ function Collectibles() {
               transparency and authenticity, and will keep it monitorable and
               tamper-proof.{" "}
             </DivParagraph>
-            <DivRightButton>Mint Now</DivRightButton>
+            <DivRightButton onClick={() => handleMint(setMintLoader)}>
+              {mintLoader && <Loader />}{" "}
+              <span style={{ marginLeft: "5px" }}>Mint Now</span>
+            </DivRightButton>
           </DivRightRightWrapper>
         </DivRight>
       </Section>
