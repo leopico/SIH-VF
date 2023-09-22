@@ -4,7 +4,6 @@ import NavBar from "./NavBar";
 import About from "./About";
 import { Link } from "react-scroll";
 import SetAuthContext from "../context/SetAuthContext";
-import GetContractContext from "../context/GetContractContext";
 
 const Section = styled.div`
   width: 100%;
@@ -159,7 +158,6 @@ const PlayNowButton = styled.button`
 
 function Hero() {
   const { addr } = useContext(SetAuthContext);
-  const { ownerAddress } = useContext(GetContractContext);
 
   return (
     <>
@@ -172,9 +170,6 @@ function Hero() {
         <WriteWrapper>
           <WriteWallet>
             {addr ? `wallet connected: ${addr}` : "wallet not yet connected"}
-          </WriteWallet>
-          <WriteWallet>
-            {ownerAddress ? `Owner Address: ${ownerAddress}` : ""}
           </WriteWallet>
           <WriteTitle>Virtual Forest</WriteTitle>
           {/* <WriteBody>NFTs and Conservation</WriteBody> */}

@@ -10,6 +10,9 @@ import {
 } from "./Constant";
 import MessageContext from "./MessageContext";
 import SetAuthContext from "./SetAuthContext";
+import BigNumber from "bignumber.js";
+import axios from "axios";
+import { hostServer } from "./Constant";
 
 const connectWithContract = async () => {
   try {
@@ -56,12 +59,29 @@ export const SetContractContextProvider = (props) => {
         setLoader(true);
         const contract = await connectWithContract();
         const getseed = await contract.getSeed();
-        await getseed.wait();
+        const receipt = await getseed.wait();
+
+        let tokenId;
+
+        // Extract the tokenId from the Transfer event
+        const transferEvent = await receipt.logs.find(
+          (log) => log.eventName === "SeedMinted"
+        );
+        if (transferEvent) {
+          const bigNumberTokenId = await receipt.logs[1].args[1];
+          const stringTokenId = new BigNumber(bigNumberTokenId).toString();
+          tokenId = parseInt(stringTokenId);
+          // console.log(`Seed minted! Token ID: ${tokenId}`, typeof tokenId);
+        }
         //here we go to store requirements data into our database
+        await axios
+          .post(`${hostServer}/send-seeddetails`, { tokenId, profileId })
+          .then((res) => res.data);
+
         setLoader(false);
         setMessage({
           type: "success",
-          message: "You already get the seed",
+          message: `Seed minted! Token ID: ${tokenId}`,
         });
       }
     } catch (error) {
@@ -98,7 +118,7 @@ export const SetContractContextProvider = (props) => {
         setWaterLoader(false);
         setMessage({
           type: "success",
-          message: "You already giving the water.",
+          message: "You have given the water.",
         });
       }
     } catch (error) {

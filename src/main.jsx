@@ -6,14 +6,13 @@ import App from "./App";
 
 import { createConfig, configureChains, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
-import { mainnet } from "wagmi/chains";
+import { sepolia, mainnet } from "wagmi/chains";
 import { MessageContextProvider } from "./context/MessageContext";
 import { SetAuthContextProvider } from "./context/SetAuthContext";
 import { SetContractContextProvider } from "./context/SetContractContext";
-import { GetContractContextProvider } from "./context/GetContractContext";
 
 const { publicClient, webSocketPublicClient } = configureChains(
-  [mainnet],
+  [sepolia, mainnet],
   [publicProvider()]
 );
 
@@ -32,11 +31,9 @@ root.render(
       <MessageContextProvider>
         <SetAuthContextProvider>
           <SetContractContextProvider>
-            <GetContractContextProvider>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
-            </GetContractContextProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
           </SetContractContextProvider>
         </SetAuthContextProvider>
       </MessageContextProvider>

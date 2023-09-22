@@ -1,4 +1,4 @@
-import { hostServer } from "./Constant";
+import { hostServer, ChainId } from "./Constant";
 import { createContext, useEffect, useState } from "react";
 import { useContext } from "react";
 import MessageContext from "./MessageContext";
@@ -41,12 +41,33 @@ export const SetAuthContextProvider = (props) => {
     if (isConnected) {
       await disconnectAsync();
     }
+
     // enabling the web3 provider metamask
-    const { account } = await connectAsync({
+    await connectAsync({
       connector: new InjectedConnector(),
     });
 
-    const userData = { address: account, chain: 1 };
+    // Get the Ethereum object
+    const ethereum = window.ethereum;
+
+    // Get account and chainId
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+    const account = await accounts[0];
+    const chainIdHex = await ethereum.request({ method: "eth_chainId" });
+
+    const expectedChainId = ChainId; // Hex representation of 11155111
+
+    if (chainIdHex !== expectedChainId) {
+      // User is connected to a different network, prompt them to switch
+      setMessage({
+        type: "error",
+        message: "Please switch to Sepolia testnet in your wallet.",
+      });
+      setLoader(false);
+      return;
+    }
+
+    const userData = { address: account, chain: chainIdHex };
     // making a post request to our 'request-message' endpoint
     const { data } = await axios.post(
       `${hostServer}/request-message`,
@@ -85,6 +106,7 @@ export const SetAuthContextProvider = (props) => {
         });
       })
       .catch((err) => {
+        setLoader(false);
         setMessage({
           type: "error",
           message: "You can't authenticated! Try again.",
