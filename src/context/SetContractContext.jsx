@@ -75,7 +75,7 @@ export const SetContractContextProvider = (props) => {
         }
         //here we go to store requirements data into our database
         await axios
-          .post(`${hostServer}/send-seeddetails`, { tokenId, profileId })
+          .post(`${hostServer}/create-seed`, { tokenId, profileId })
           .then((res) => res.data);
 
         setLoader(false);
@@ -114,6 +114,10 @@ export const SetContractContextProvider = (props) => {
         const getwater = await contract.giveWater(selectedWaterTokenId);
         await getwater.wait();
         //here we go to store requirements data into our database
+        await axios
+          .post(`${hostServer}/water-seed`, {seedId:  selectedWaterTokenId })
+          .then((res) => res.data);
+
         setSelectedWaterTokenId("");
         setWaterLoader(false);
         setMessage({
@@ -174,6 +178,12 @@ export const SetContractContextProvider = (props) => {
         const vfContract = await connectWithContract();
         await vfContract.applyManure(selectedManureTokenId);
         // await tx.wait();
+
+        //here we go to store requirements data into our database
+        await axios
+          .post(`${hostServer}/apply-manure`, {seedId:  selectedManureTokenId })
+          .then((res) => res.data);
+
         setSelectedManureTokenId("");
         setManureLoader(false);
         setMessage({
@@ -212,6 +222,7 @@ export const SetContractContextProvider = (props) => {
         });
         setMintLoader(false);
       }, 2000);
+
     } catch (error) {
       console.log(error);
       setMintLoader(false);
