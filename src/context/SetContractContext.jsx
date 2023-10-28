@@ -10,10 +10,10 @@ import MessageContext from "./MessageContext";
 import SetAuthContext from "./SetAuthContext";
 import BigNumber from "bignumber.js";
 import axios from "axios";
-import { hostServer } from "./Constant";
+import { hostServer, hostServerSocket } from "./Constant";
 import { io } from "socket.io-client";
 
-const socket = io(hostServer);
+const socket = io(hostServerSocket);
 
 const initialState = {
   seeds: [],

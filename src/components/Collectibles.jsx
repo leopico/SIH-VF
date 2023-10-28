@@ -384,7 +384,7 @@ function Collectibles() {
                 Seeds Details
               </DivSeedsButton>
 
-              <PopupContainer pContainer isOpen={isPopupOpen}>
+              <PopupContainer isOpen={isPopupOpen}>
                 <CloseButtonContainer>
                   <CloseButton onClick={closePopup}>Close</CloseButton>
                 </CloseButtonContainer>

@@ -14,8 +14,10 @@ export const manTokenContractAbi = MANTokenContract.abi;
 
 export const ChainId = import.meta.env.VITE_REACT_APP_CHAINID;
 
+export const hostServer = import.meta.env.VITE_REACT_APP_SERVER_URL;
+
 // Conditionally set hostServer based on the environment
-export const hostServer = import.meta.env.DEV
+export const hostServerSocket = import.meta.env.DEV
   ? import.meta.env.VITE_REACT_APP_SERVER_URL
   : import.meta.env.VITE_REACT_APP_SERVER_URL_SOCKET; 
 
