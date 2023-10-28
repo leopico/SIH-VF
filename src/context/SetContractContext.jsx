@@ -13,7 +13,9 @@ import axios from "axios";
 import { hostServer, hostServerSocket } from "./Constant";
 import { io } from "socket.io-client";
 
-const socket = io(hostServerSocket);
+const socket = io(hostServerSocket, {
+  withCredentials: true,
+});
 
 const initialState = {
   seeds: [],
