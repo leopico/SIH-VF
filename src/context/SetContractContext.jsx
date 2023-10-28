@@ -10,27 +10,22 @@ import MessageContext from "./MessageContext";
 import SetAuthContext from "./SetAuthContext";
 import BigNumber from "bignumber.js";
 import axios from "axios";
-import { hostServer, hostServerSocket } from "./Constant";
-import { io } from "socket.io-client";
+import { hostServer } from "./Constant";
 
-const socket = io(hostServerSocket, {
-  withCredentials: true,
-});
 
 const initialState = {
   seeds: [],
 };
 
-function reducer(state, action) {
+const reducer = (state, action) => {
   switch (action.type) {
-    case "INITIAL_SEED_DATA":
-      return { seeds: action.payload };
-    case "SEED_DATA":
-      return { seeds: [...state.seeds, action.payload] };
+    case 'SET_SEEDS':
+      return { ...state, seeds: action.seeds };
     default:
       return state;
   }
-}
+};
+
 
 
 const connectWithContract = async () => {
@@ -54,9 +49,7 @@ export const SetContractContextProvider = (props) => {
   const { profileId, handleAuth } = useContext(SetAuthContext);
   const [state, dispatch] = useReducer(reducer, initialState);
   const seeds = state.seeds;
-  // console.log(seeds);
-
-  console.log(hostServer);
+  console.log(seeds)
 
   //interact with contract to getting the seed
   const getSeed = async (setLoader) => {
@@ -177,22 +170,19 @@ export const SetContractContextProvider = (props) => {
   };
 
   useEffect(() => {
+    // Now, conditionally fetch seed data based on profileId
     if (profileId) {
-      socket.emit("profileId", profileId);
-
-      socket.on("initialSeedsData", (seeds) => {
-        dispatch({ type: "INITIAL_SEED_DATA", payload: seeds });
-      });
-
-      socket.on("seedData", (seed) => {
-        dispatch({ type: "SEED_DATA", payload: seed });
-      });
-
-      return () => {
-        socket.disconnect();
-      };
+      axios.get(`${hostServer}/get-seeds?profileId=${profileId}`)
+        .then((response) => {
+          const seeds = response.data;
+          dispatch({ type: 'SET_SEEDS', seeds });
+        }) 
+        .catch((error) => {
+          console.error(error);
+        });
     }
   }, [profileId]);
+
 
   // Function to conditionally check if a seed can be minted
   const canMintTreeNFT = (seed) => {
@@ -200,12 +190,9 @@ export const SetContractContextProvider = (props) => {
   };
 
 
-  const handleMint = async (setMintLoader, seedId) => {
+  const handleMint = async (mintStates, setMintStates, seedId) => {
     try {
-      if (!profileId) {
-        await handleAuth(setMintLoader);
-      }
-      setMintLoader(true);
+      setMintStates({ ...mintStates, [seedId]: true });
 
       //trigger to mint to smart-contract for tree-nft
 
@@ -214,7 +201,7 @@ export const SetContractContextProvider = (props) => {
         .post(`${hostServer}/tree-nft`, { seedId, profileId })
         .then((res) => res.data);
 
-      setMintLoader(false);
+      setMintStates({ ...mintStates, [seedId]: false });
       setMessage({
         type: "success",
         message: `Tree minted! Token ID: ${seedId}`,
@@ -222,7 +209,7 @@ export const SetContractContextProvider = (props) => {
 
     } catch (error) {
       console.log(error);
-      setMintLoader(false);
+      setMintStates({ ...mintStates, [seedId]: false });
       setMessage({
         type: "error",
         message: "Failed to mint NFT!",

@@ -309,9 +309,11 @@ const TableCell = styled.td`
   padding: 8px;
 `;
 
+const initialMintStates = {};
+
 function Collectibles() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [mintLoader, setMintLoader] = useState(false);
+  const [mintStates, setMintStates] = useState(initialMintStates);
   //take fun from useContext of SetContract
   const { handleMint, seeds, canMintTreeNFT } = useContext(SetContractContext);
   // console.log(seeds);
@@ -413,8 +415,9 @@ function Collectibles() {
                             <TableCell>{seed.isTree ? "Tree" : "Not a Tree"}</TableCell>
                             <TableCell>
                               {canMintTreeNFT(seed) && !seed.isTree && (
-                                <DivRightButton onClick={() => handleMint(setMintLoader, seed.seedId)}>
-                                  {mintLoader && <Loader />} <span style={{ marginLeft: "5px" }}>Mint Now</span>
+                                <DivRightButton onClick={() => handleMint(mintStates, setMintStates, seed.seedId)}>
+                                  {mintStates[seed.seedId] && <Loader />}
+                                  <span style={{ marginLeft: "5px" }}>Mint Now</span>
                                 </DivRightButton>
                               )}
                             </TableCell>
