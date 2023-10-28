@@ -1,18 +1,35 @@
 import Web3Modal from "web3modal";
-import { Contract, ethers, formatEther, parseEther } from "ethers";
-import { createContext, useContext } from "react";
+import { Contract, ethers } from "ethers";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import {
   contractAddress,
   contractAbi,
-  manTokenContractAddress,
-  manTokenContractAbi,
 } from "./Constant";
 import MessageContext from "./MessageContext";
 import SetAuthContext from "./SetAuthContext";
 import BigNumber from "bignumber.js";
 import axios from "axios";
 import { hostServer } from "./Constant";
+import { io } from "socket.io-client";
+
+const socket = io(hostServer); //connect to server
+
+const initialState = {
+  seeds: [],
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "INITIAL_SEED_DATA":
+      return { seeds: action.payload };
+    case "SEED_DATA":
+      return { seeds: [...state.seeds, action.payload] };
+    default:
+      return state;
+  }
+}
+
 
 const connectWithContract = async () => {
   try {
@@ -27,28 +44,15 @@ const connectWithContract = async () => {
   }
 };
 
-const connectWithManTokenContract = async () => {
-  try {
-    const web3modal = new Web3Modal();
-    const connection = await web3modal.connect();
-    const provider = new ethers.BrowserProvider(connection);
-    const signer = await provider.getSigner();
-    const manTokenContract = new Contract(
-      manTokenContractAddress,
-      manTokenContractAbi,
-      signer
-    );
-    return manTokenContract;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 const SetContractContext = createContext();
 
 export const SetContractContextProvider = (props) => {
   const { setMessage } = useContext(MessageContext);
-  const { profileId, handleAuth, address } = useContext(SetAuthContext);
+  const { profileId, handleAuth } = useContext(SetAuthContext);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const seeds = state.seeds;
+  // console.log(seeds);
 
   //interact with contract to getting the seed
   const getSeed = async (setLoader) => {
@@ -110,12 +114,10 @@ export const SetContractContextProvider = (props) => {
         return;
       } else {
         setWaterLoader(true);
-        const contract = await connectWithContract();
-        const getwater = await contract.giveWater(selectedWaterTokenId);
-        await getwater.wait();
+
         //here we go to store requirements data into our database
         await axios
-          .post(`${hostServer}/water-seed`, {seedId:  selectedWaterTokenId })
+          .post(`${hostServer}/water-seed`, { seedId: selectedWaterTokenId })
           .then((res) => res.data);
 
         setSelectedWaterTokenId("");
@@ -134,7 +136,6 @@ export const SetContractContextProvider = (props) => {
     }
   };
 
-  const minBalanceEther = 1;
 
   const applyManure = async (
     setManureLoader,
@@ -147,58 +148,20 @@ export const SetContractContextProvider = (props) => {
         return;
       }
 
-      const manToken = await connectWithManTokenContract();
-      // console.log(manToken);
-      if (!manToken) {
-        setMessage({
-          type: "error",
-          message: "MAN token contract not initialized.",
-        });
-        return;
-      }
-
       setManureLoader(true);
-      const balanceWei = await manToken.balanceOf(address);
-      const balanceEther = formatEther(balanceWei);
-      // console.log(`Balance of ${address}: ${balanceEther} ETH`);
 
-      if (parseFloat(balanceEther) > minBalanceEther) {
-        const approveTx = await manToken.approve(
-          contractAddress,
-          parseEther("1")
-        );
-        await approveTx.wait();
-        setMessage({
-          type: "success",
-          message: "Approved manure token!",
-        });
+      //here we go to store requirements data into our database
+      await axios
+        .post(`${hostServer}/apply-manure`, { seedId: selectedManureTokenId })
+        .then((res) => res.data);
 
-        //this is only view function and we can not wait for this transcation
-        //so that we can not apply manure in VF
-        const vfContract = await connectWithContract();
-        await vfContract.applyManure(selectedManureTokenId);
-        // await tx.wait();
+      setSelectedManureTokenId("");
+      setManureLoader(false);
+      setMessage({
+        type: "success",
+        message: "Manure added!",
+      });
 
-        //here we go to store requirements data into our database
-        await axios
-          .post(`${hostServer}/apply-manure`, {seedId:  selectedManureTokenId })
-          .then((res) => res.data);
-
-        setSelectedManureTokenId("");
-        setManureLoader(false);
-        setMessage({
-          type: "success",
-          message: "Manure added!",
-        });
-      } else {
-        setSelectedManureTokenId("");
-        setManureLoader(false);
-        // Balance is not greater than 1 ETH, you can take another action here
-        setMessage({
-          type: "error",
-          message: "You don't have enought manure!",
-        });
-      }
     } catch (error) {
       console.error("Error:", error);
       setManureLoader(false);
@@ -209,19 +172,49 @@ export const SetContractContextProvider = (props) => {
     }
   };
 
-  const handleMint = async (setMintLoader) => {
+  useEffect(() => {
+    if (profileId) {
+      socket.emit("profileId", profileId);
+
+      socket.on("initialSeedsData", (seeds) => {
+        dispatch({ type: "INITIAL_SEED_DATA", payload: seeds });
+      });
+
+      socket.on("seedData", (seed) => {
+        dispatch({ type: "SEED_DATA", payload: seed });
+      });
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [profileId]);
+
+  // Function to conditionally check if a seed can be minted
+  const canMintTreeNFT = (seed) => {
+    return seed.stage === "tree" && !seed.isTree;
+  };
+
+
+  const handleMint = async (setMintLoader, seedId) => {
     try {
       if (!profileId) {
         await handleAuth(setMintLoader);
       }
       setMintLoader(true);
-      setTimeout(() => {
-        setMessage({
-          type: "success",
-          message: "Your Seed is not ready to become Tree  NFT",
-        });
-        setMintLoader(false);
-      }, 2000);
+
+      //trigger to mint to smart-contract for tree-nft
+
+      //here we go to store requirements data into our database
+      await axios
+        .post(`${hostServer}/tree-nft`, { seedId, profileId })
+        .then((res) => res.data);
+
+      setMintLoader(false);
+      setMessage({
+        type: "success",
+        message: `Tree minted! Token ID: ${seedId}`,
+      });
 
     } catch (error) {
       console.log(error);
@@ -235,7 +228,7 @@ export const SetContractContextProvider = (props) => {
 
   return (
     <SetContractContext.Provider
-      value={{ getSeed, giveWater, applyManure, handleMint }}
+      value={{ getSeed, giveWater, applyManure, handleMint, seeds, canMintTreeNFT }}
     >
       {props.children}
     </SetContractContext.Provider>
