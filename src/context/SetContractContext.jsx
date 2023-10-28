@@ -10,10 +10,10 @@ import MessageContext from "./MessageContext";
 import SetAuthContext from "./SetAuthContext";
 import BigNumber from "bignumber.js";
 import axios from "axios";
-import { hostServer, hostServerSocket } from "./Constant";
+import { hostServer } from "./Constant";
 import { io } from "socket.io-client";
 
-const socket = io(hostServerSocket); //connect to server
+const socket = io(hostServer);
 
 const initialState = {
   seeds: [],
@@ -53,6 +53,8 @@ export const SetContractContextProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const seeds = state.seeds;
   // console.log(seeds);
+
+  console.log(hostServer);
 
   //interact with contract to getting the seed
   const getSeed = async (setLoader) => {

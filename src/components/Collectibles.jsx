@@ -314,7 +314,7 @@ function Collectibles() {
   const [mintLoader, setMintLoader] = useState(false);
   //take fun from useContext of SetContract
   const { handleMint, seeds, canMintTreeNFT } = useContext(SetContractContext);
-  console.log(seeds);
+  // console.log(seeds);
 
   const openPopup = () => {
     setIsPopupOpen(true);
