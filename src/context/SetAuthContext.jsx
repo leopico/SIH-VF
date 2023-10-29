@@ -76,6 +76,7 @@ export const SetAuthContextProvider = (props) => {
         headers: {
           "content-type": "application/json",
         },
+        withCredentials: true, 
       }
     );
     const message = data.message;
