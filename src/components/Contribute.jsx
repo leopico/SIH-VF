@@ -276,6 +276,7 @@ function Contribute() {
   const [manureLoader, setManureLoader] = useState(false);
   //take contract set function from SetContractContext
   const { getSeed, giveWater, applyManure } = useContext(SetContractContext);
+  // console.log(selectedWaterTokenId);
 
   return (
     <>
@@ -311,7 +312,7 @@ function Contribute() {
                 <DivDivAddButton>+</DivDivAddButton>
               </GeneralSectionDivDiv3> */}
               <StyledInput
-                type="number"
+                type="text"
                 placeholder="Enter Token Id"
                 value={selectedWaterTokenId}
                 onChange={(e) => setSelectedWaterTokenId(e.target.value)}
@@ -347,7 +348,7 @@ function Contribute() {
                 <DivDivAddButton>+</DivDivAddButton>
               </GeneralSectionDivDiv3> */}
               <StyledInput
-                type="number"
+                type="string"
                 placeholder="Enter Token Id"
                 value={selectedManureTokenId}
                 onChange={(e) => setSelectedManureTokenId(e.target.value)}

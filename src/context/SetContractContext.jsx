@@ -1,14 +1,9 @@
-import Web3Modal from "web3modal";
-import { Contract, ethers } from "ethers";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { 
+  createContext, useContext, useEffect, useReducer, useState 
+} from "react";
 import PropTypes from "prop-types";
-import {
-  contractAddress,
-  contractAbi,
-} from "./Constant";
 import MessageContext from "./MessageContext";
 import SetAuthContext from "./SetAuthContext";
-import BigNumber from "bignumber.js";
 import axios from "axios";
 import { hostServer } from "./Constant";
 
@@ -27,29 +22,16 @@ const reducer = (state, action) => {
 };
 
 
-
-const connectWithContract = async () => {
-  try {
-    const web3modal = new Web3Modal();
-    const connection = await web3modal.connect();
-    const provider = new ethers.BrowserProvider(connection);
-    const signer = await provider.getSigner();
-    const contract = new Contract(contractAddress, contractAbi, signer);
-    return contract;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-
 const SetContractContext = createContext();
 
 export const SetContractContextProvider = (props) => {
   const { setMessage } = useContext(MessageContext);
   const { profileId, handleAuth } = useContext(SetAuthContext);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [userDetails, setUserDetails] = useState(null); 
   const seeds = state.seeds;
-  console.log(seeds)
+  // console.log(seeds);
+  // console.log(userDetails);
 
   //interact with contract to getting the seed
   const getSeed = async (setLoader) => {
@@ -58,31 +40,15 @@ export const SetContractContextProvider = (props) => {
         await handleAuth(setLoader);
       } else {
         setLoader(true);
-        const contract = await connectWithContract();
-        const getseed = await contract.getSeed();
-        const receipt = await getseed.wait();
-
-        let tokenId;
-
-        // Extract the tokenId from the Transfer event
-        const transferEvent = await receipt.logs.find(
-          (log) => log.eventName === "SeedMinted"
-        );
-        if (transferEvent) {
-          const bigNumberTokenId = await receipt.logs[1].args[1];
-          const stringTokenId = new BigNumber(bigNumberTokenId).toString();
-          tokenId = parseInt(stringTokenId);
-          // console.log(`Seed minted! Token ID: ${tokenId}`, typeof tokenId);
-        }
-        //here we go to store requirements data into our database
-        await axios
-          .post(`${hostServer}/create-seed`, { tokenId, profileId })
-          .then((res) => res.data);
+        // Make a POST request to create a seed
+      const response = await axios.post(`${hostServer}/create-seed`, { profileId });
+      // Retrieve the seedId from the response
+      const seedId = await response.data;
 
         setLoader(false);
         setMessage({
           type: "success",
-          message: `Seed minted! Token ID: ${tokenId}`,
+          message: `Seed minted! Seed ID: ${seedId}`,
         });
       }
     } catch (error) {
@@ -180,6 +146,15 @@ export const SetContractContextProvider = (props) => {
         .catch((error) => {
           console.error(error);
         });
+
+        axios.get(`${hostServer}/get-user?profileId=${profileId}`)
+        .then((response) => {
+          const userData = response.data;
+          setUserDetails(userData);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   }, [profileId]);
 
@@ -219,7 +194,15 @@ export const SetContractContextProvider = (props) => {
 
   return (
     <SetContractContext.Provider
-      value={{ getSeed, giveWater, applyManure, handleMint, seeds, canMintTreeNFT }}
+      value={{ 
+        getSeed, 
+        giveWater, 
+        applyManure, 
+        handleMint, 
+        seeds, 
+        canMintTreeNFT,
+        userDetails
+      }}
     >
       {props.children}
     </SetContractContext.Provider>
