@@ -33,32 +33,43 @@ export const SetContractContextProvider = (props) => {
   // console.log(seeds);
   // console.log(userDetails);
 
-  //interact with contract to getting the seed
-  const getSeed = async (setLoader) => {
-    try {
-      if (!profileId) {
-        await handleAuth(setLoader);
-      } else {
-        setLoader(true);
-        // Make a POST request to create a seed
+  // Interact with the contract to get the seed
+const getSeed = async (setLoader) => {
+  try {
+    if (!profileId) {
+      await handleAuth(setLoader);
+    } else {
+      setLoader(true);
+      // Make a POST request to create a seed
       const response = await axios.post(`${hostServer}/create-seed`, { profileId });
       // Retrieve the seedId from the response
-      const seedId = await response.data;
+      const seedId = response.data;
 
-        setLoader(false);
-        setMessage({
-          type: "success",
-          message: `Seed minted! Seed ID: ${seedId}`,
-        });
-      }
-    } catch (error) {
       setLoader(false);
       setMessage({
-        type: "error",
-        message: "You can't get seed properly!",
+        type: "success",
+        message: `Seed minted! Seed ID: ${seedId}`,
       });
     }
-  };
+  } catch (error) {
+    setLoader(false);
+    if (error.response) {
+      // If the error is coming from the server, extract the error message
+      const errorMessage = error.response.data;
+      setMessage({
+        type: "error",
+        message: errorMessage,
+      });
+    } else {
+      // If it's a network error or some other unexpected error
+      setMessage({
+        type: "error",
+        message: "You can not get the seed properly.",
+      });
+    }
+  }
+};
+
 
   //interact with contract to giving the water
   const giveWater = async (
@@ -91,11 +102,22 @@ export const SetContractContextProvider = (props) => {
         });
       }
     } catch (error) {
+      setSelectedWaterTokenId("");
       setWaterLoader(false);
-      setMessage({
-        type: "error",
-        message: "You can't give water properly!",
-      });
+      if (error.response) {
+        // If the error is coming from the server, extract the error message
+        const errorMessage = error.response.data;
+        setMessage({
+          type: "error",
+          message: errorMessage,
+        });
+      } else {
+        // If it's a network error or some other unexpected error
+        setMessage({
+          type: "error",
+          message: "You can not give water properly.",
+        });
+      }
     }
   };
 
@@ -126,12 +148,22 @@ export const SetContractContextProvider = (props) => {
       });
 
     } catch (error) {
-      console.error("Error:", error);
       setManureLoader(false);
-      setMessage({
-        type: "error",
-        message: "Failed to add manure. Please try again.",
-      });
+      setSelectedManureTokenId("");
+      if (error.response) {
+        // If the error is coming from the server, extract the error message
+        const errorMessage = error.response.data;
+        setMessage({
+          type: "error",
+          message: errorMessage,
+        });
+      } else {
+        // If it's a network error or some other unexpected error
+        setMessage({
+          type: "error",
+          message: "You can not apply manure properly.",
+        });
+      }
     }
   };
 
@@ -144,6 +176,13 @@ export const SetContractContextProvider = (props) => {
           dispatch({ type: 'SET_SEEDS', seeds });
         }) 
         .catch((error) => {
+          if(error.response) {
+            const errorMessage = error.response.data
+            setMessage({
+              type: 'error',
+              message: errorMessage
+            });
+          }
           console.error(error);
         });
 
@@ -153,10 +192,17 @@ export const SetContractContextProvider = (props) => {
           setUserDetails(userData);
         })
         .catch((error) => {
+          if(error.response) {
+            const errorMessage = error.response.data;
+            setMessage({
+              type: 'error',
+              message: errorMessage
+            });
+          }
           console.error(error);
         });
     }
-  }, [profileId]);
+  }, [profileId, setMessage]);
 
 
   // Function to conditionally check if a seed can be minted
@@ -183,12 +229,21 @@ export const SetContractContextProvider = (props) => {
       });
 
     } catch (error) {
-      console.log(error);
       setMintStates({ ...mintStates, [seedId]: false });
-      setMessage({
-        type: "error",
-        message: "Failed to mint NFT!",
-      });
+      if (error.response) {
+        // If the error is coming from the server, extract the error message
+        const errorMessage = error.response.data;
+        setMessage({
+          type: "error",
+          message: errorMessage,
+        });
+      } else {
+        // If it's a network error or some other unexpected error
+        setMessage({
+          type: "error",
+          message: "You can not mint nft properly.",
+        });
+      }
     }
   };
 

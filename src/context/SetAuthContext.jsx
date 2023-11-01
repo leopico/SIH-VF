@@ -37,6 +37,18 @@ export const SetAuthContextProvider = (props) => {
 
   const handleAuth = async (setLoader) => {
     setLoader(true);
+
+    // Check if window.ethereum is available
+    if (!window.ethereum) {
+      setLoader(false);
+      setMessage({
+        type: "error",
+        message: "Please install the MetaMask wallet to login.",
+      });
+      return;
+    }
+
+
     //disconnects the web3 provider if it's already active
     if (isConnected) {
       await disconnectAsync();
@@ -76,9 +88,26 @@ export const SetAuthContextProvider = (props) => {
         headers: {
           "content-type": "application/json",
         },
-        withCredentials: true, 
+        withCredentials: true,
       }
-    );
+    ).catch((err) => {
+      setLoader(false);
+      if (err.response) {
+        const errorMessage = err.response.data;
+        setMessage({
+          type: "error",
+          message: errorMessage
+        })
+      } else {
+        setLoader(false);
+        // If it's a network error or some other unexpected error
+        setMessage({
+          type: "error",
+          message: "You can not authenticate properly.",
+        });
+      }
+    })
+
     const message = data.message;
     // signing the received message via metamask
     const signature = await signMessageAsync({ message });
@@ -90,7 +119,23 @@ export const SetAuthContextProvider = (props) => {
         signature,
       },
       { withCredentials: true } // set cookie from Express server
-    );
+    ).catch((err) => {
+      setLoader(false);
+      if (err.response) {
+        const errorMessage = err.response.data;
+        setMessage({
+          type: "error",
+          message: errorMessage
+        })
+      } else {
+        setLoader(false);
+        // If it's a network error or some other unexpected error
+        setMessage({
+          type: "error",
+          message: "You can not authenticate properly.",
+        });
+      }
+    })
 
     await axios(`${hostServer}/authenticate`, {
       withCredentials: true,
@@ -108,20 +153,44 @@ export const SetAuthContextProvider = (props) => {
       })
       .catch((err) => {
         setLoader(false);
-        setMessage({
-          type: "error",
-          message: "You can't authenticated! Try again.",
-        });
-        console.log(err);
-      });
+        if (err.response) {
+          const errorMessage = err.response.data;
+          setMessage({
+            type: "error",
+            message: errorMessage
+          })
+        } else {
+          setLoader(false);
+          // If it's a network error or some other unexpected error
+          setMessage({
+            type: "error",
+            message: "You can not authenticate properly.",
+          });
+        }
+      })
   };
 
   const signOut = async () => {
-    //remove cookie of authData
-    removeCookie("session", { path: "/" });
-    await axios(`${hostServer}/logout`, {
-      withCredentials: true,
-    });
+    try {
+      //remove cookie of authData
+      removeCookie("session", { path: "/" });
+      await axios(`${hostServer}/logout`, {
+        withCredentials: true,
+      });
+    } catch (error) {
+      if (error.response) {
+        const errorMessage = error.response.data;
+        setMessage({
+          type: "error",
+          message: errorMessage
+        });
+      } else {
+        setMessage({
+          type: "error",
+          message: "You can't sign out properly."
+        })
+      }
+    }
   };
 
   useEffect(() => {
