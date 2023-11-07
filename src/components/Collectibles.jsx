@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import SetContractContext from "../context/SetContractContext";
 import Loader from "./Loader";
 
@@ -33,14 +33,14 @@ const DivLeftTop = styled.div`
 `;
 
 //Animation for underline effect
-const underlineAnimation = keyframes`
-from {
-  width: 0;
-}
-to {
-  width: 100%;
-}
-`;
+// const underlineAnimation = keyframes`
+// from {
+//   width: 0;
+// }
+// to {
+//   width: 100%;
+// }
+// `;
 
 const DivLeftTopItem = styled.div`
   flex: 1;
@@ -382,56 +382,58 @@ function Collectibles() {
             </DivParagraph>
 
 
-              <DivSeedsButton onClick={openPopup}>
-                Seeds Details
-              </DivSeedsButton>
+            <DivSeedsButton onClick={openPopup}>
+              Seeds Details
+            </DivSeedsButton>
 
-              <PopupContainer isOpen={isPopupOpen}>
-                <CloseButtonContainer>
-                  <CloseButton onClick={closePopup}>Close</CloseButton>
-                </CloseButtonContainer>
-                <p style={{ textAlign: "center" }}>This is temporary data of seeds details for you.</p>
-                <Table>
-                  <TableHead>
-                    <TableHeadRow>
-                      <TableHeader>Seed ID</TableHeader>
-                      <TableHeader>Stage</TableHeader>
-                      <TableHeader>hrsToDie</TableHeader>
-                      <TableHeader>Age</TableHeader>
-                      <TableHeader>Is Tree</TableHeader>
-                      <TableHeader>Action</TableHeader>
-                    </TableHeadRow>
-                  </TableHead>
-                  <TableBody>
-                    {seeds ? (
-                      seeds
-                        .filter((seed) => seed && seed.seedId)
-                        .map((seed) => (
-                          <TableRow key={seed.seedId}>
-                            <TableCell>{seed.seedId}</TableCell>
-                            <TableCell>{seed.stage}</TableCell>
-                            <TableCell>{seed.hrsToDie}</TableCell>
-                            <TableCell>{seed.age}</TableCell>
-                            <TableCell>{seed.isTree ? "Tree" : "Not a Tree"}</TableCell>
-                            <TableCell>
-                              {canMintTreeNFT(seed) && !seed.isTree && (
-                                <DivRightButton onClick={() => handleMint(mintStates, setMintStates, seed.seedId)}>
-                                  {mintStates[seed.seedId] && <Loader />}
-                                  <span style={{ marginLeft: "5px" }}>Mint Now</span>
-                                </DivRightButton>
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan="4">There are no seeds currently</TableCell>
-                      </TableRow>
-                    )
-                    }
-                  </TableBody>
-                </Table>
-              </PopupContainer>
+            <PopupContainer isOpen={isPopupOpen}>
+              <CloseButtonContainer>
+                <CloseButton onClick={closePopup}>Close</CloseButton>
+              </CloseButtonContainer>
+              <p style={{ textAlign: "center" }}>This is temporary data of seeds details for you.</p>
+              <Table>
+                <TableHead>
+                  <TableHeadRow>
+                    <TableHeader>Seed ID</TableHeader>
+                    <TableHeader>Seed health</TableHeader>
+                    <TableHeader>Stage</TableHeader>
+                    <TableHeader>hrsToDie</TableHeader>
+                    <TableHeader>Age</TableHeader>
+                    <TableHeader>Is Tree</TableHeader>
+                    <TableHeader>Action</TableHeader>
+                  </TableHeadRow>
+                </TableHead>
+                <TableBody>
+                  {seeds ? (
+                    seeds
+                      .filter((seed) => seed && seed.seedId)
+                      .map((seed) => (
+                        <TableRow key={seed.seedId}>
+                          <TableCell>{seed.seedId}</TableCell>
+                          <TableCell>{seed.seedHealth}</TableCell>
+                          <TableCell>{seed.stage}</TableCell>
+                          <TableCell>{seed.hrsToDie}</TableCell>
+                          <TableCell>{seed.age}</TableCell>
+                          <TableCell>{seed.isTree ? "Tree" : "Not a Tree"}</TableCell>
+                          <TableCell>
+                            {canMintTreeNFT(seed) && !seed.isTree && (
+                              <DivRightButton onClick={() => handleMint(mintStates, setMintStates, seed.seedId)}>
+                                {mintStates[seed.seedId] && <Loader />}
+                                <span style={{ marginLeft: "5px" }}>Mint Now</span>
+                              </DivRightButton>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan="4">There are no seeds currently</TableCell>
+                    </TableRow>
+                  )
+                  }
+                </TableBody>
+              </Table>
+            </PopupContainer>
 
           </DivRightRightWrapper>
         </DivRight>

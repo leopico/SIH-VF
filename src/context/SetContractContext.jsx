@@ -43,7 +43,7 @@ const getSeed = async (setLoader) => {
       // Make a POST request to create a seed
       const response = await axios.post(`${hostServer}/create-seed`, { profileId });
       // Retrieve the seedId from the response
-      const seedId = response.data;
+      const seedId = await response.data;
 
       setLoader(false);
       setMessage({
