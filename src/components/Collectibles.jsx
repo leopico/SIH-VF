@@ -316,7 +316,7 @@ function Collectibles() {
   const [mintStates, setMintStates] = useState(initialMintStates);
   //take fun from useContext of SetContract
   const { handleMint, seeds, canMintTreeNFT } = useContext(SetContractContext);
-  // console.log(seeds);
+  console.log(seeds);
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -396,9 +396,10 @@ function Collectibles() {
                   <TableHeadRow>
                     <TableHeader>Seed ID</TableHeader>
                     <TableHeader>Seed health</TableHeader>
-                    <TableHeader>Stage</TableHeader>
                     <TableHeader>hrsToDie</TableHeader>
+                    <TableHeader>Stage</TableHeader>
                     <TableHeader>Age</TableHeader>
+                    <TableHeader>Seed alive</TableHeader>
                     <TableHeader>Is Tree</TableHeader>
                     <TableHeader>Action</TableHeader>
                   </TableHeadRow>
@@ -411,9 +412,10 @@ function Collectibles() {
                         <TableRow key={seed.seedId}>
                           <TableCell>{seed.seedId}</TableCell>
                           <TableCell>{seed.seedHealth}</TableCell>
-                          <TableCell>{seed.stage}</TableCell>
                           <TableCell>{seed.hrsToDie}</TableCell>
+                          <TableCell>{seed.stage}</TableCell>
                           <TableCell>{seed.age}</TableCell>
+                          <TableCell>{seed.isDead ? "dead" : "alive"}</TableCell>
                           <TableCell>{seed.isTree ? "Tree" : "Not a Tree"}</TableCell>
                           <TableCell>
                             {canMintTreeNFT(seed) && !seed.isTree && (
