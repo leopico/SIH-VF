@@ -223,9 +223,9 @@ const Map = (props) => {
                                         </LocationInfo>
                                         <ButtonContainer>
                                             <LoaderContainer>
-                                                {
-                                                    waterLoader || manureLoader || mintStates[selectedMarker.seedId] && <Loader />
-                                                }
+                                                {waterLoader && <Loader />}
+                                                {manureLoader && <Loader />}
+                                                {mintStates[selectedMarker.seedId] && <Loader />}
                                             </LoaderContainer>
                                             <Button
                                                 onClick={() =>

@@ -1,7 +1,4 @@
-import { useContext, useState } from "react";
 import styled from "styled-components";
-import SetContractContext from "../context/SetContractContext";
-import Loader from "./Loader";
 
 const Section = styled.div`
   height: 100vh;
@@ -199,73 +196,6 @@ const DivParagraph = styled.div`
   letter-spacing: 2px;
 `;
 
-const DivRightButton = styled.div`
-  flex: 1;
-  display: flex;
-  cursor: pointer;
-  width: 90px;
-  height: 10px;
-  font-size: 10px;
-  font-family: "inter", sans-serif;
-  border-radius: 20px;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.9;
-  background: #cee963;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  border: none;
-  color: #3d4917;
-  min-height: 25px;
-  font-weight: 600;
-  letter-spacing: 2px;
-`;
-
-const DivSeedsButton = styled.div`
-flex: 1;
-display: flex;
-cursor: pointer;
-width: 142px;
-height: 25px;
-font-size: 16px;
-font-family: "inter", sans-serif;
-border-radius: 20px;
-align-items: center;
-justify-content:   center;
-opacity: 0.9;
-background: #cee963;
-box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-border: none;
-color: #3d4917;
-min-height: 42px;
-font-weight: 600;
-letter-spacing: 2px;
-`;
-
-const CloseButton = styled.button`
-  /* Add any additional styling for the close button */
-`;
-
-const CloseButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end; /* Align the button to the right */
-  width: 100%; /* Ensure the button stretches to the full width */
-`;
-
-const PopupContainer = styled.div`
-  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  z-index: 1000;
-  max-height: 400px; /* Adjust the maximum height as needed */
-  overflow-y: auto; /* Enable scrolling if content overflows the container */
-  width: 80%; /* Adjust the width as needed */
-`;
-
 
 
 const ThreeMapModel = styled.div`
@@ -280,51 +210,10 @@ const StyledImage = styled.img`
   border-radius: 50%; 
 `;
 
-const Table = styled.table`
-  border-collapse: collapse;
-  width: 100%;
-  margin: 20px 0;
-`;
 
-const TableHead = styled.thead`
-  background-color: #f5f5f5;
-`;
-
-const TableHeadRow = styled.tr``;
-
-const TableHeader = styled.th`
-  padding: 8px;
-  text-align: left;
-`;
-
-const TableBody = styled.tbody``;
-
-const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-`;
-
-const TableCell = styled.td`
-  padding: 8px;
-`;
-
-const initialMintStates = {};
 
 function Collectibles() {
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [mintStates, setMintStates] = useState(initialMintStates);
-  //take fun from useContext of SetContract
-  const { handleMint, seeds, canMintTreeNFT } = useContext(SetContractContext);
-  // console.log(seeds);
 
-  const openPopup = () => {
-    setIsPopupOpen(true);
-  };
-
-  const closePopup = () => {
-    setIsPopupOpen(false);
-  };
 
   return (
     <>
@@ -380,62 +269,6 @@ function Collectibles() {
               transparency and authenticity, and will keep it monitorable and
               tamper-proof.{" "}
             </DivParagraph>
-
-
-            <DivSeedsButton onClick={openPopup}>
-              Seeds Details
-            </DivSeedsButton>
-
-            <PopupContainer isOpen={isPopupOpen}>
-              <CloseButtonContainer>
-                <CloseButton onClick={closePopup}>Close</CloseButton>
-              </CloseButtonContainer>
-              <p style={{ textAlign: "center" }}>This is temporary data of seeds details for you.</p>
-              <Table>
-                <TableHead>
-                  <TableHeadRow>
-                    <TableHeader>Seed ID</TableHeader>
-                    <TableHeader>Seed health</TableHeader>
-                    <TableHeader>hrsToDie</TableHeader>
-                    <TableHeader>Stage</TableHeader>
-                    <TableHeader>Age</TableHeader>
-                    <TableHeader>Seed alive</TableHeader>
-                    <TableHeader>Is Tree</TableHeader>
-                    <TableHeader>Action</TableHeader>
-                  </TableHeadRow>
-                </TableHead>
-                <TableBody>
-                  {seeds ? (
-                    seeds
-                      .filter((seed) => seed && seed.seedId)
-                      .map((seed) => (
-                        <TableRow key={seed.seedId}>
-                          <TableCell>{seed.seedId}</TableCell>
-                          <TableCell>{seed.seedHealth}</TableCell>
-                          <TableCell>{seed.hrsToDie}</TableCell>
-                          <TableCell>{seed.stage}</TableCell>
-                          <TableCell>{seed.age}</TableCell>
-                          <TableCell>{seed.isDead ? "dead" : "alive"}</TableCell>
-                          <TableCell>{seed.isTree ? "Tree" : "Not a Tree"}</TableCell>
-                          <TableCell>
-                            {canMintTreeNFT(seed) && !seed.isTree && (
-                              <DivRightButton onClick={() => handleMint(mintStates, setMintStates, seed.seedId)}>
-                                {mintStates[seed.seedId] && <Loader />}
-                                <span style={{ marginLeft: "5px" }}>Mint Now</span>
-                              </DivRightButton>
-                            )}
-                          </TableCell>
-                        </TableRow>
-                      ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan="4">There are no seeds currently</TableCell>
-                    </TableRow>
-                  )
-                  }
-                </TableBody>
-              </Table>
-            </PopupContainer>
 
           </DivRightRightWrapper>
         </DivRight>

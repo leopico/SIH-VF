@@ -2,7 +2,7 @@ export const ChainId = import.meta.env.VITE_REACT_APP_CHAINID;
 
 export const hostServer = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
-export const mapOptions = import.meta.env.VITE_REACT_GOOGLE_MAP_API;
+export const mapOptions = "AIzaSyDASmNU9QlgQDIOgL1K9SfwNFjIqMJvdng";
 
 export const MAP_THEME = [
     {
