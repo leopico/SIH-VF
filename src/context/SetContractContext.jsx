@@ -75,7 +75,6 @@ const getSeed = async (setLoader) => {
   const giveWater = async (
     setWaterLoader,
     selectedWaterTokenId,
-    setSelectedWaterTokenId
   ) => {
     try {
       if (!profileId) {
@@ -94,7 +93,6 @@ const getSeed = async (setLoader) => {
           .post(`${hostServer}/water-seed`, { seedId: selectedWaterTokenId })
           .then((res) => res.data);
 
-        setSelectedWaterTokenId("");
         setWaterLoader(false);
         setMessage({
           type: "success",
@@ -102,7 +100,6 @@ const getSeed = async (setLoader) => {
         });
       }
     } catch (error) {
-      setSelectedWaterTokenId("");
       setWaterLoader(false);
       if (error.response) {
         // If the error is coming from the server, extract the error message
@@ -125,14 +122,12 @@ const getSeed = async (setLoader) => {
   const applyManure = async (
     setManureLoader,
     selectedManureTokenId,
-    setSelectedManureTokenId
   ) => {
     try {
       if (!profileId) {
         await handleAuth(setManureLoader);
         return;
       }
-
       setManureLoader(true);
 
       //here we go to store requirements data into our database
@@ -140,7 +135,7 @@ const getSeed = async (setLoader) => {
         .post(`${hostServer}/apply-manure`, { seedId: selectedManureTokenId })
         .then((res) => res.data);
 
-      setSelectedManureTokenId("");
+  
       setManureLoader(false);
       setMessage({
         type: "success",
@@ -149,7 +144,6 @@ const getSeed = async (setLoader) => {
 
     } catch (error) {
       setManureLoader(false);
-      setSelectedManureTokenId("");
       if (error.response) {
         // If the error is coming from the server, extract the error message
         const errorMessage = error.response.data;
