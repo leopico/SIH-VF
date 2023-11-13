@@ -34,14 +34,15 @@ export const SetContractContextProvider = (props) => {
   // console.log(userDetails);
 
   // Interact with the contract to get the seed
-const getSeed = async (setLoader) => {
+const getSeed = async (setLoader, lat, lng) => {
   try {
     if (!profileId) {
       await handleAuth(setLoader);
     } else {
       setLoader(true);
       // Make a POST request to create a seed
-      const response = await axios.post(`${hostServer}/create-seed`, { profileId });
+      const response = await axios.post(`${hostServer}/create-seed`,
+       { profileId, lat, lng });
       // Retrieve the seedId from the response
       const seedId = await response.data;
 

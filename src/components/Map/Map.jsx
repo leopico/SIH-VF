@@ -5,6 +5,7 @@ import { GoogleMap, InfoWindow, Marker } from "@react-google-maps/api";
 import { MAP_THEME } from "../../context/Constant";
 import ChangeMapType from "./layers/ChangeMapType";
 import Loader from "../Loader";
+import SetAuthContext from "../../context/SetAuthContext";
 
 const seed = '/map/images/seed.png'
 const sapling = '/map/images/sapling.png';
@@ -14,6 +15,7 @@ const ellipse = '/map/images/Ellipse.png';
 const location = '/map/images/location.png';
 const manurebutton = '/map/images/manurebutton.png';
 const waterbutton = '/map/images/waterbutton.png';
+const seedbuttoon = '/map/images/seedbutton.png';
 const user = '/map/images/user.png';
 
 const InfoWindowContainer = styled.div`
@@ -89,13 +91,16 @@ const Map = (props) => {
     const mapRef = useRef(null);
     const [changeMyTypeID, setToggleChangeMyTypeID] = useState(1);
     const [selectedMarker, setSelectedMarker] = useState("");
+    const [getSeedMarker, setGetSeedMarker] = useState("");
+
     const [waterLoader, setWaterLoader] = useState(false);
     const [manureLoader, setManureLoader] = useState(false);
     const [mintStates, setMintStates] = useState(initialMintStates);
-    // const [loader, setLoader] = useState(false);
+    const [loader, setLoader] = useState(false);
 
     const { getSeed, giveWater, applyManure, seeds, handleMint, canMintTreeNFT } = useContext(SetContractContext);
-    console.log(seeds);
+    const { address } = useContext(SetAuthContext);
+    // console.log(seeds);
 
     const containerStyle = {
         width: "95vw",
@@ -108,6 +113,20 @@ const Map = (props) => {
 
     const onMapLoad = (mapInstance) => {
         mapRef.current = mapInstance;
+        mapInstance.addListener("click", handleMapClick);
+    };
+
+    const handleMapClick = (event) => {
+        const { latLng } = event;
+        const lat = latLng.lat();
+        const lng = latLng.lng();
+
+        const location = {
+            lat,
+            lng,
+        };
+
+        setGetSeedMarker(location);
     };
 
     const MapType = {
@@ -160,6 +179,42 @@ const Map = (props) => {
                             styles: MAP_THEME,
                         }}
                     >
+
+                        {
+                            getSeedMarker && (
+                                <InfoWindow
+                                    position={{ lat: getSeedMarker.lat, lng: getSeedMarker.lng }}
+                                    options={{
+                                        pixelOffset: new window.google.maps.Size(0, -40),
+                                    }}
+                                    onCloseClick={() => setGetSeedMarker("")}
+                                >
+                                    <div>
+                                        <InfoWindowContainer>
+                                            <LocationInfo>
+                                                <InfoIcon src={location} alt="Map" />
+                                                <LocationCoords>
+                                                    <InfoText>Lat: <strong>{getSeedMarker.lat}</strong></InfoText>
+                                                    <InfoText>Lng: <strong>{getSeedMarker.lng}</strong></InfoText>
+                                                </LocationCoords>
+                                            </LocationInfo>
+                                            <ButtonContainer>
+                                                <LoaderContainer>
+                                                    {loader && <Loader />}
+                                                </LoaderContainer>
+                                                <Button
+                                                    onClick={() => getSeed(setLoader, getSeedMarker.lat, getSeedMarker.lng)}
+                                                >
+                                                    <ButtonIcon src={seedbuttoon} alt="Seed" />
+                                                </Button>
+                                            </ButtonContainer>
+                                        </InfoWindowContainer>
+                                    </div>
+
+                                </InfoWindow>
+                            )
+                        }
+
                         {seeds.map((marker) => (
                             <div key={marker.seedId}>
                                 <Marker
@@ -189,7 +244,7 @@ const Map = (props) => {
                                         <InfoRow>
                                             <UserIcon src={user} alt="User" />
                                             <InfoText>
-                                                Owner : <strong>{selectedMarker.profileId.substring(0, 4) + "****" + selectedMarker.profileId.slice(-4)}</strong>
+                                                Owner : <strong>{address.substring(0, 4) + "****" + address.slice(-4)}</strong>
                                             </InfoText>
                                         </InfoRow>
                                         <InfoRow>
