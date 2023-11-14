@@ -7,7 +7,8 @@ import ChangeMapType from "./layers/ChangeMapType";
 import Loader from "../Loader";
 import SetAuthContext from "../../context/SetAuthContext";
 
-const seed = '/map/images/seed.png'
+const seed = '/map/images/seed.png';
+const seeddead= '/map/images/seeddead.png';
 const sapling = '/map/images/sapling.png';
 const tree = '/map/images/tree.png';
 const clock = '/map/images/clock.png';
@@ -222,9 +223,10 @@ const Map = (props) => {
                                     options={{
                                         icon:
                                             marker.stage === "seed" ? seed :
-                                                marker.stage === "sapling" ? sapling :
-                                                    marker.stage === "tree" && !marker.isTree ? sapling :
-                                                        marker.isTree && tree,
+                                                marker.stage === "sapling" && !marker.isDead && !marker.isTree ? sapling :
+                                                    marker.stage === "tree" && !marker.isTree && !marker.isDead ? sapling :
+                                                        marker.isTree ? tree :
+                                                            marker.isDead && seeddead
                                     }}
                                     onClick={() => setSelectedMarker(marker)}
                                 />
