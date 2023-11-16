@@ -7,6 +7,7 @@ import Loader from './Loader';
 import axios from 'axios';
 import MessageContext from '../context/MessageContext';
 import { hostServer } from '../context/Constant';
+import { useNavigate } from 'react-router-dom';
 
 const profileImage = "/map/images/user.png";
 
@@ -40,6 +41,7 @@ const EditButton = styled.button`
   `;
 
 function Dashboard() {
+  const navigate = useNavigate();
   const { userDetails } = useContext(SetContractContext);
   const { setMessage } = useContext(MessageContext);
   const user = userDetails && userDetails.length > 0 ? userDetails[0] : {};
@@ -80,6 +82,8 @@ function Dashboard() {
         type: 'success',
         message: "You have successfully updated!"
       });
+      navigate('/');
+      window.location.reload();
     } catch (error) {
       setLoader(false);
       setIsEditing(false);

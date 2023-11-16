@@ -11,7 +11,7 @@ function App() {
     <Section>
       <Routes>
         <Route path="/" element={<Hero />} />
-        <Route path="/" element={<Prototype />} />
+        <Route path="/prototype" element={<Prototype />} />
         <Route path="Dashboard" element={<Dashboard />} />
       </Routes>
     </Section>
