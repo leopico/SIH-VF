@@ -315,13 +315,6 @@ const Map = (props) => {
                                                     </Button>
                                                 )
                                             }
-                                            <Button
-                                                onClick={() => handleMint(
-                                                    mintStates, setMintStates, selectedMarker.seedId
-                                                )}
-                                            >
-                                                <ButtonIcon src={tree} alt="Mint NFT" />
-                                            </Button>
                                         </ButtonContainer>
                                     </InfoWindowContainer>
                                 </div>

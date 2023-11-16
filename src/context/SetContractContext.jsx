@@ -222,72 +222,35 @@ export const SetContractContextProvider = (props) => {
   };
 
 
-  // const handleMint = async (mintStates, setMintStates, seedID, lat, lng) => {
-  //   const latitude = lat.toString();
-  //   const longitude = lng.toString();
-  //   const vfContract = await connectWithContract();
+  const handleMint = async (mintStates, setMintStates, seedId, lat, lng) => {
+    const latitude = lat.toString();
+    const longitude = lng.toString();
+    const vfContract = await connectWithContract();
 
-  //   try {
-  //     if (!profileId) {
-  //       setMessage({
-  //         type: "error",
-  //         message: "Please login with your metamask!"
-  //       })
-  //     } else {
-  //       setMintStates({ ...mintStates, [seedID]: true });
-
-  //       //trigger to mint to smart-contract for tree-nft
-  //       // const mintNft = await vfContract.mintTreeNFT(latitude, longitude, seedID);
-  //       // await mintNft.wait();
-
-  //       //here we go to store requirements data into our database
-  //       await axios
-  //         .post(`${hostServer}/tree-nft`, { seedID, profileId })
-  //         .then((res) => res.data);
-
-  //       setMintStates({ ...mintStates, [seedID]: false });
-  //       setMessage({
-  //         type: "success",
-  //         message: `Tree minted! Token ID: ${seedID}`,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     setMintStates({ ...mintStates, [seedID]: false });
-  //     if (error.response) {
-  //       // If the error is coming from the server, extract the error message
-  //       const errorMessage = error.response.data;
-  //       setMessage({
-  //         type: "error",
-  //         message: errorMessage,
-  //       });
-  //     } else {
-  //       // If it's a network error or some other unexpected error
-  //       setMessage({
-  //         type: "error",
-  //         message: "You can not mint nft properly.",
-  //       });
-  //     }
-  //   }
-  // };
-
-  const handleMint = async (mintStates, setMintStates, seedId) => {
-    console.log(seedId)
     try {
-      setMintStates({ ...mintStates, [seedId]: true });
+      if (!profileId) {
+        setMessage({
+          type: "error",
+          message: "Please login with your metamask!"
+        })
+      } else {
+        setMintStates({ ...mintStates, [seedId]: true });
 
-      //trigger to mint to smart-contract for tree-nft
+        //trigger to mint to smart-contract for tree-nft
+        const mintNft = await vfContract.mintTreeNFT(latitude, longitude, seedId);
+        await mintNft.wait();
 
-      //here we go to store requirements data into our database
-      await axios
-        .post(`${hostServer}/tree-nft`, { seedId, profileId })
-        .then((res) => res.data);
+        //here we go to store requirements data into our database
+        await axios
+          .post(`${hostServer}/tree-nft`, { seedId, profileId })
+          .then((res) => res.data);
 
-      setMintStates({ ...mintStates, [seedId]: false });
-      setMessage({
-        type: "success",
-        message: `Tree minted! Token ID: ${seedId}`,
-      });
-
+        setMintStates({ ...mintStates, [seedId]: false });
+        setMessage({
+          type: "success",
+          message: `Tree minted! Token ID: ${seedId}`,
+        });
+      }
     } catch (error) {
       setMintStates({ ...mintStates, [seedId]: false });
       if (error.response) {
@@ -306,6 +269,7 @@ export const SetContractContextProvider = (props) => {
       }
     }
   };
+
 
   return (
     <SetContractContext.Provider
