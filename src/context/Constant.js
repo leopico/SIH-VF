@@ -4,6 +4,8 @@ export const hostServer = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
 export const mapOptions = "AIzaSyDASmNU9QlgQDIOgL1K9SfwNFjIqMJvdng";
 
+export const contractAddress = import.meta.env.VITE_REACT_APP_CONTRACT_ADDRESS;
+
 export const MAP_THEME = [
     {
         "featureType": "administrative",

@@ -8,7 +8,7 @@ import Loader from "../Loader";
 import SetAuthContext from "../../context/SetAuthContext";
 
 const seed = '/map/images/seed.png';
-const seeddead= '/map/images/seeddead.png';
+const seeddead = '/map/images/seeddead.png';
 const sapling = '/map/images/sapling.png';
 const tree = '/map/images/tree.png';
 const clock = '/map/images/clock.png';
@@ -308,14 +308,20 @@ const Map = (props) => {
                                                 canMintTreeNFT(selectedMarker) && !selectedMarker.isTree && (
                                                     <Button
                                                         onClick={() => handleMint(
-                                                            mintStates, setMintStates, selectedMarker.seedId
+                                                            mintStates, setMintStates, selectedMarker.seedId, selectedMarker.location.lat, selectedMarker.location.lng
                                                         )}
                                                     >
                                                         <ButtonIcon src={tree} alt="Mint NFT" />
                                                     </Button>
                                                 )
                                             }
-
+                                            <Button
+                                                onClick={() => handleMint(
+                                                    mintStates, setMintStates, selectedMarker.seedId
+                                                )}
+                                            >
+                                                <ButtonIcon src={tree} alt="Mint NFT" />
+                                            </Button>
                                         </ButtonContainer>
                                     </InfoWindowContainer>
                                 </div>

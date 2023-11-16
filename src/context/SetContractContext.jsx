@@ -1,12 +1,29 @@
-import { 
-  createContext, useContext, useEffect, useReducer, useState 
+import {
+  createContext, useContext, useEffect, useReducer, useState
 } from "react";
 import PropTypes from "prop-types";
 import MessageContext from "./MessageContext";
 import SetAuthContext from "./SetAuthContext";
 import axios from "axios";
 import { hostServer } from "./Constant";
+import ABI from './TreeNFT.json';
+import Web3Modal from "web3modal";
+import { Contract, ethers } from "ethers";
+import { contractAddress } from "./Constant";
 
+
+const connectWithContract = async () => {
+  try {
+    const web3modal = new Web3Modal();
+    const connection = await web3modal.connect();
+    const provider = new ethers.BrowserProvider(connection);
+    const signer = await provider.getSigner();
+    const contract = new Contract(contractAddress, ABI, signer);
+    return contract;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const initialState = {
   seeds: [],
@@ -28,49 +45,48 @@ export const SetContractContextProvider = (props) => {
   const { setMessage } = useContext(MessageContext);
   const { profileId, handleAuth } = useContext(SetAuthContext);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [userDetails, setUserDetails] = useState(null); 
+  const [userDetails, setUserDetails] = useState(null);
   const seeds = state.seeds;
   // console.log(seeds);
   // console.log(userDetails);
 
   // Interact with the contract to get the seed
-const getSeed = async (setLoader, lat, lng) => {
-  try {
-    if (!profileId) {
-      await handleAuth(setLoader);
-    } else {
-      setLoader(true);
-      // Make a POST request to create a seed
-      const response = await axios.post(`${hostServer}/create-seed`,
-       { profileId, lat, lng });
-      // Retrieve the seedId from the response
-      const seedId = await response.data;
+  const getSeed = async (setLoader, lat, lng) => {
+    try {
+      if (!profileId) {
+        await handleAuth(setLoader);
+      } else {
+        setLoader(true);
+        // Make a POST request to create a seed
+        const response = await axios.post(`${hostServer}/create-seed`,
+          { profileId, lat, lng });
+        // Retrieve the seedId from the response
+        const seedId = await response.data;
 
+        setLoader(false);
+        setMessage({
+          type: "success",
+          message: `Seed minted! Seed ID: ${seedId}`,
+        });
+      }
+    } catch (error) {
       setLoader(false);
-      setMessage({
-        type: "success",
-        message: `Seed minted! Seed ID: ${seedId}`,
-      });
+      if (error.response) {
+        // If the error is coming from the server, extract the error message
+        const errorMessage = error.response.data;
+        setMessage({
+          type: "error",
+          message: errorMessage,
+        });
+      } else {
+        // If it's a network error or some other unexpected error
+        setMessage({
+          type: "error",
+          message: "You can not get the seed properly.",
+        });
+      }
     }
-  } catch (error) {
-    setLoader(false);
-    if (error.response) {
-      // If the error is coming from the server, extract the error message
-      const errorMessage = error.response.data;
-      setMessage({
-        type: "error",
-        message: errorMessage,
-      });
-    } else {
-      // If it's a network error or some other unexpected error
-      setMessage({
-        type: "error",
-        message: "You can not get the seed properly.",
-      });
-    }
-  }
-};
-
+  };
 
   //interact with contract to giving the water
   const giveWater = async (
@@ -136,7 +152,7 @@ const getSeed = async (setLoader, lat, lng) => {
         .post(`${hostServer}/apply-manure`, { seedId: selectedManureTokenId })
         .then((res) => res.data);
 
-  
+
       setManureLoader(false);
       setMessage({
         type: "success",
@@ -169,9 +185,9 @@ const getSeed = async (setLoader, lat, lng) => {
         .then((response) => {
           const seeds = response.data;
           dispatch({ type: 'SET_SEEDS', seeds });
-        }) 
+        })
         .catch((error) => {
-          if(error.response) {
+          if (error.response) {
             const errorMessage = error.response.data
             setMessage({
               type: 'error',
@@ -181,13 +197,13 @@ const getSeed = async (setLoader, lat, lng) => {
           console.error(error);
         });
 
-        axios.get(`${hostServer}/get-user?profileId=${profileId}`)
+      axios.get(`${hostServer}/get-user?profileId=${profileId}`)
         .then((response) => {
           const userData = response.data;
           setUserDetails(userData);
         })
         .catch((error) => {
-          if(error.response) {
+          if (error.response) {
             const errorMessage = error.response.data;
             setMessage({
               type: 'error',
@@ -206,7 +222,56 @@ const getSeed = async (setLoader, lat, lng) => {
   };
 
 
+  // const handleMint = async (mintStates, setMintStates, seedID, lat, lng) => {
+  //   const latitude = lat.toString();
+  //   const longitude = lng.toString();
+  //   const vfContract = await connectWithContract();
+
+  //   try {
+  //     if (!profileId) {
+  //       setMessage({
+  //         type: "error",
+  //         message: "Please login with your metamask!"
+  //       })
+  //     } else {
+  //       setMintStates({ ...mintStates, [seedID]: true });
+
+  //       //trigger to mint to smart-contract for tree-nft
+  //       // const mintNft = await vfContract.mintTreeNFT(latitude, longitude, seedID);
+  //       // await mintNft.wait();
+
+  //       //here we go to store requirements data into our database
+  //       await axios
+  //         .post(`${hostServer}/tree-nft`, { seedID, profileId })
+  //         .then((res) => res.data);
+
+  //       setMintStates({ ...mintStates, [seedID]: false });
+  //       setMessage({
+  //         type: "success",
+  //         message: `Tree minted! Token ID: ${seedID}`,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     setMintStates({ ...mintStates, [seedID]: false });
+  //     if (error.response) {
+  //       // If the error is coming from the server, extract the error message
+  //       const errorMessage = error.response.data;
+  //       setMessage({
+  //         type: "error",
+  //         message: errorMessage,
+  //       });
+  //     } else {
+  //       // If it's a network error or some other unexpected error
+  //       setMessage({
+  //         type: "error",
+  //         message: "You can not mint nft properly.",
+  //       });
+  //     }
+  //   }
+  // };
+
   const handleMint = async (mintStates, setMintStates, seedId) => {
+    console.log(seedId)
     try {
       setMintStates({ ...mintStates, [seedId]: true });
 
@@ -244,12 +309,12 @@ const getSeed = async (setLoader, lat, lng) => {
 
   return (
     <SetContractContext.Provider
-      value={{ 
-        getSeed, 
-        giveWater, 
-        applyManure, 
-        handleMint, 
-        seeds, 
+      value={{
+        getSeed,
+        giveWater,
+        applyManure,
+        handleMint,
+        seeds,
         canMintTreeNFT,
         userDetails
       }}
