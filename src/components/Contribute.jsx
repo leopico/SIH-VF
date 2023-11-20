@@ -70,11 +70,13 @@ const ButtonContainer = styled.div`
 const Button = styled.button`
   margin: 0 10px;
   padding: 10px;
-  font-size: 16px;
+  font-size: 16px;  
   cursor: pointer;
-  background-color: #20361a53;
   color: transparent;
-
+  background-color: ${({ selected }) => (selected ? "#20361a53" : "#6b380300")};
+  color: ${({ selected }) => (selected ? "gray" : "transparent")};
+  
+  //typo
   text-align: center;
   writing-mode: horizontal-rl;
   font-family: "inter", sans-serif;
@@ -111,8 +113,12 @@ function Contribute() {
     <>
       <Section id="contribute">
         <ButtonContainer>
-          <Button onClick={() => handleButtonClick("map1")}>User Map</Button>
-          <Button onClick={() => handleButtonClick("map2")}>World Map</Button>
+          <Button onClick={() => handleButtonClick("map1")} selected={selectedData === "map1"}>
+            User Map
+          </Button>
+          <Button onClick={() => handleButtonClick("map2")} selected={selectedData === "map2"}>
+            World Map
+          </Button>
         </ButtonContainer>
         <MapSection>
           <RightBanner>
