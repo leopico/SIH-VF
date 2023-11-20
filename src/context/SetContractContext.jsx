@@ -11,7 +11,6 @@ import Web3Modal from "web3modal";
 import { Contract, ethers } from "ethers";
 import { contractAddress } from "./Constant";
 
-
 const connectWithContract = async () => {
   try {
     const web3modal = new Web3Modal();
@@ -25,6 +24,8 @@ const connectWithContract = async () => {
   }
 };
 
+
+
 const initialState = {
   seeds: [],
 };
@@ -37,6 +38,22 @@ const reducer = (state, action) => {
       return state;
   }
 };
+//end for seeds of associated user
+
+//start for seeds of all users
+const startState = {
+  allSeeds: [],
+};
+
+const allSeedsReducer = (State, action) => {
+  switch (action.type) {
+    case 'SET_AllSEEDS':
+      return { ...State, allSeeds: action.getAllSeeds };
+    default:
+      return State;
+  }
+};
+//start for seeds of all users
 
 
 const SetContractContext = createContext();
@@ -45,10 +62,13 @@ export const SetContractContextProvider = (props) => {
   const { setMessage } = useContext(MessageContext);
   const { profileId, handleAuth } = useContext(SetAuthContext);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [userDetails, setUserDetails] = useState(null);
+  const [State, Dispatch] = useReducer(allSeedsReducer, startState);
+  const [userDetails, setUserDetails] = useState(null); 
   const seeds = state.seeds;
+  const allSeeds = State.allSeeds;
   // console.log(seeds);
   // console.log(userDetails);
+  // console.log(allSeeds);
 
   // Interact with the contract to get the seed
   const getSeed = async (setLoader, lat, lng) => {
@@ -63,30 +83,31 @@ export const SetContractContextProvider = (props) => {
         // Retrieve the seedId from the response
         const seedId = await response.data;
 
-        setLoader(false);
-        setMessage({
-          type: "success",
-          message: `Seed minted! Seed ID: ${seedId}`,
-        });
-      }
-    } catch (error) {
       setLoader(false);
-      if (error.response) {
-        // If the error is coming from the server, extract the error message
-        const errorMessage = error.response.data;
-        setMessage({
-          type: "error",
-          message: errorMessage,
-        });
-      } else {
-        // If it's a network error or some other unexpected error
-        setMessage({
-          type: "error",
-          message: "You can not get the seed properly.",
-        });
-      }
+      setMessage({
+        type: "success",
+        message: `Seed minted! Seed ID: ${seedId}`,
+      });
     }
-  };
+  } catch (error) {
+    setLoader(false);
+    if (error.response) {
+      // If the error is coming from the server, extract the error message
+      const errorMessage = error.response.data;
+      setMessage({
+        type: "error",
+        message: errorMessage,
+      });
+    } else {
+      // If it's a network error or some other unexpected error
+      setMessage({
+        type: "error",
+        message: "You can not get the seed properly.",
+      });
+    }
+  }
+};
+
 
   //interact with contract to giving the water
   const giveWater = async (
@@ -182,8 +203,8 @@ export const SetContractContextProvider = (props) => {
     // Now, conditionally fetch seed data based on profileId
     if (profileId) {
       axios.get(`${hostServer}/get-seeds?profileId=${profileId}`)
-        .then((response) => {
-          const seeds = response.data;
+        .then(async (response) => {
+          const seeds = await response.data;
           dispatch({ type: 'SET_SEEDS', seeds });
         })
         .catch((error) => {
@@ -197,7 +218,7 @@ export const SetContractContextProvider = (props) => {
           console.error(error);
         });
 
-      axios.get(`${hostServer}/get-user?profileId=${profileId}`)
+        axios.get(`${hostServer}/get-user?profileId=${profileId}`)
         .then((response) => {
           const userData = response.data;
           setUserDetails(userData);
@@ -213,6 +234,23 @@ export const SetContractContextProvider = (props) => {
           console.error(error);
         });
     }
+
+    axios.get(`${hostServer}/get-allseeds`)
+      .then(async (res) => {
+        const getAllSeeds = await res.data;
+        console.log(getAllSeeds);
+        Dispatch({ type: 'SET_AllSEEDS', getAllSeeds});
+      })
+      .catch((error) => {
+        if (error.response) {
+          const errorMessage = error.response.data
+          setMessage({
+            type: 'error',
+            message: errorMessage
+          });
+        }
+        console.error(error);
+      });
   }, [profileId, setMessage]);
 
 
@@ -280,7 +318,8 @@ export const SetContractContextProvider = (props) => {
         handleMint,
         seeds,
         canMintTreeNFT,
-        userDetails
+        userDetails,
+        allSeeds
       }}
     >
       {props.children}

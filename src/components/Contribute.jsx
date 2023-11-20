@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Collectibles from "./Collectibles";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { mapOptions } from "../context/Constant";
 import Map from "./Map/Map";
+import WorldMap from "./Map/WorldMap";
 
 const Section = styled.div`
   height: 100vh;
@@ -10,8 +12,9 @@ const Section = styled.div`
   align-items: center;
   justify-content: center;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   background: linear-gradient(#95ba85, #6d9061);
+  margin-bottom: 20px;
 `;
 
 const MapSection = styled.div`
@@ -60,22 +63,61 @@ const RightBanner = styled.div`
   flex: 3;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+`;
 
+const Button = styled.button`
+  margin: 0 10px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #20361a53;
+  color: transparent;
 
+  text-align: center;
+  writing-mode: horizontal-rl;
+  font-family: "inter", sans-serif;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 2.5rem;
+  letter-spacing: 25px;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #ffffff;
+`;
 
 function Contribute() {
   const { isLoaded } = useJsApiLoader({
     id: mapOptions,
     googleMapsApiKey: mapOptions
-  })
+  });
 
+  const [selectedData, setSelectedData] = useState(() => {
+    return localStorage.getItem("selectedData") || "map2"
+  });
+
+  const handleButtonClick = (mayType) => {
+    setSelectedData(mayType);
+  };
+
+  // Update localStorage when selectedData changes
+  useEffect(() => {
+    localStorage.setItem("selectedData", selectedData);
+    // console.log(selectedData);
+  }, [selectedData]);
 
   return (
     <>
       <Section id="contribute">
+        <ButtonContainer>
+          <Button onClick={() => handleButtonClick("map1")}>User Map</Button>
+          <Button onClick={() => handleButtonClick("map2")}>World Map</Button>
+        </ButtonContainer>
         <MapSection>
           <RightBanner>
-            <Map isLoaded={isLoaded} />
+            {selectedData === "map1" && <Map isLoaded={isLoaded}/>}
+            {selectedData === "map2" && <WorldMap isLoaded={isLoaded}/>}
           </RightBanner>
           <LeftBanner>Contribute</LeftBanner>
         </MapSection>
