@@ -99,9 +99,8 @@ const Map = (props) => {
     const [mintStates, setMintStates] = useState(initialMintStates);
     const [loader, setLoader] = useState(false);
 
-    const {allSeeds, getSeed, giveWater, applyManure, seeds, handleMint, canMintTreeNFT } = useContext(SetContractContext);
+    const { getSeed, giveWater, applyManure, seeds, handleMint, canMintTreeNFT } = useContext(SetContractContext);
     const { address } = useContext(SetAuthContext);
-    console.log(allSeeds);
 
     const containerStyle = {
         width: "95vw",
