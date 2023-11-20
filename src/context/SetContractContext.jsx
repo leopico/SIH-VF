@@ -1,5 +1,5 @@
-import { 
-  createContext, useContext, useEffect, useReducer, useState 
+import {
+  createContext, useContext, useEffect, useReducer, useState
 } from "react";
 import PropTypes from "prop-types";
 import MessageContext from "./MessageContext";
@@ -7,7 +7,7 @@ import SetAuthContext from "./SetAuthContext";
 import axios from "axios";
 import { hostServer } from "./Constant";
 
-
+//start for seeds of associated user
 const initialState = {
   seeds: [],
 };
@@ -20,6 +20,22 @@ const reducer = (state, action) => {
       return state;
   }
 };
+//end for seeds of associated user
+
+//start for seeds of all users
+const startState = {
+  allSeeds: [],
+};
+
+const allSeedsReducer = (State, action) => {
+  switch (action.type) {
+    case 'SET_AllSEEDS':
+      return { ...State, allSeeds: action.getAllSeeds };
+    default:
+      return State;
+  }
+};
+//start for seeds of all users
 
 
 const SetContractContext = createContext();
@@ -28,48 +44,51 @@ export const SetContractContextProvider = (props) => {
   const { setMessage } = useContext(MessageContext);
   const { profileId, handleAuth } = useContext(SetAuthContext);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [userDetails, setUserDetails] = useState(null); 
+  const [userDetails, setUserDetails] = useState(null);
+  const [State, Dispatch] = useReducer(allSeedsReducer, startState);
   const seeds = state.seeds;
+  const allSeeds = State.allSeeds;
   // console.log(seeds);
   // console.log(userDetails);
+  // console.log(allSeeds);
 
   // Interact with the contract to get the seed
-const getSeed = async (setLoader, lat, lng) => {
-  try {
-    if (!profileId) {
-      await handleAuth(setLoader);
-    } else {
-      setLoader(true);
-      // Make a POST request to create a seed
-      const response = await axios.post(`${hostServer}/create-seed`,
-       { profileId, lat, lng });
-      // Retrieve the seedId from the response
-      const seedId = await response.data;
+  const getSeed = async (setLoader, lat, lng) => {
+    try {
+      if (!profileId) {
+        await handleAuth(setLoader);
+      } else {
+        setLoader(true);
+        // Make a POST request to create a seed
+        const response = await axios.post(`${hostServer}/create-seed`,
+          { profileId, lat, lng });
+        // Retrieve the seedId from the response
+        const seedId = await response.data;
 
+        setLoader(false);
+        setMessage({
+          type: "success",
+          message: `Seed minted! Seed ID: ${seedId}`,
+        });
+      }
+    } catch (error) {
       setLoader(false);
-      setMessage({
-        type: "success",
-        message: `Seed minted! Seed ID: ${seedId}`,
-      });
+      if (error.response) {
+        // If the error is coming from the server, extract the error message
+        const errorMessage = error.response.data;
+        setMessage({
+          type: "error",
+          message: errorMessage,
+        });
+      } else {
+        // If it's a network error or some other unexpected error
+        setMessage({
+          type: "error",
+          message: "You can not get the seed properly.",
+        });
+      }
     }
-  } catch (error) {
-    setLoader(false);
-    if (error.response) {
-      // If the error is coming from the server, extract the error message
-      const errorMessage = error.response.data;
-      setMessage({
-        type: "error",
-        message: errorMessage,
-      });
-    } else {
-      // If it's a network error or some other unexpected error
-      setMessage({
-        type: "error",
-        message: "You can not get the seed properly.",
-      });
-    }
-  }
-};
+  };
 
 
   //interact with contract to giving the water
@@ -136,7 +155,7 @@ const getSeed = async (setLoader, lat, lng) => {
         .post(`${hostServer}/apply-manure`, { seedId: selectedManureTokenId })
         .then((res) => res.data);
 
-  
+
       setManureLoader(false);
       setMessage({
         type: "success",
@@ -166,12 +185,12 @@ const getSeed = async (setLoader, lat, lng) => {
     // Now, conditionally fetch seed data based on profileId
     if (profileId) {
       axios.get(`${hostServer}/get-seeds?profileId=${profileId}`)
-        .then((response) => {
-          const seeds = response.data;
+        .then(async (response) => {
+          const seeds = await response.data;
           dispatch({ type: 'SET_SEEDS', seeds });
-        }) 
+        })
         .catch((error) => {
-          if(error.response) {
+          if (error.response) {
             const errorMessage = error.response.data
             setMessage({
               type: 'error',
@@ -181,13 +200,13 @@ const getSeed = async (setLoader, lat, lng) => {
           console.error(error);
         });
 
-        axios.get(`${hostServer}/get-user?profileId=${profileId}`)
-        .then((response) => {
-          const userData = response.data;
+      axios.get(`${hostServer}/get-user?profileId=${profileId}`)
+        .then(async (response) => {
+          const userData = await response.data;
           setUserDetails(userData);
         })
         .catch((error) => {
-          if(error.response) {
+          if (error.response) {
             const errorMessage = error.response.data;
             setMessage({
               type: 'error',
@@ -197,6 +216,23 @@ const getSeed = async (setLoader, lat, lng) => {
           console.error(error);
         });
     }
+
+    axios.get(`${hostServer}/get-allseeds`)
+      .then(async (res) => {
+        const getAllSeeds = await res.data;
+        console.log(getAllSeeds);
+        Dispatch({ type: 'SET_AllSEEDS', getAllSeeds});
+      })
+      .catch((error) => {
+        if (error.response) {
+          const errorMessage = error.response.data
+          setMessage({
+            type: 'error',
+            message: errorMessage
+          });
+        }
+        console.error(error);
+      });
   }, [profileId, setMessage]);
 
 
@@ -244,14 +280,15 @@ const getSeed = async (setLoader, lat, lng) => {
 
   return (
     <SetContractContext.Provider
-      value={{ 
-        getSeed, 
-        giveWater, 
-        applyManure, 
-        handleMint, 
-        seeds, 
+      value={{
+        getSeed,
+        giveWater,
+        applyManure,
+        handleMint,
+        seeds,
         canMintTreeNFT,
-        userDetails
+        userDetails,
+        allSeeds
       }}
     >
       {props.children}
