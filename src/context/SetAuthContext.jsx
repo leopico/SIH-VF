@@ -4,6 +4,19 @@ import { useContext } from "react";
 import MessageContext from "./MessageContext";
 import PropTypes from "prop-types";
 import { useCookies } from "react-cookie";
+import styled from "styled-components";
+
+const Button = styled.button`
+  margin: 0 5px;
+  padding: 6px;
+  font-size: 10px;  
+  cursor: pointer;
+  background-color: black;
+  text-align: center;
+  border-radius: 10%;
+  color: white
+`;
+
 
 //From Morails
 import { useAccount, useConnect, useSignMessage, useDisconnect } from "wagmi";
@@ -34,6 +47,8 @@ export const SetAuthContextProvider = (props) => {
   const { disconnectAsync } = useDisconnect();
   const { isConnected } = useAccount();
   const { signMessageAsync } = useSignMessage();
+
+  
 
   const handleAuth = async (setLoader) => {
     setLoader(true);
@@ -73,7 +88,10 @@ export const SetAuthContextProvider = (props) => {
       // User is connected to a different network, prompt them to switch
       setMessage({
         type: "error",
-        message: "Please switch to Sepolia testnet in your wallet.",
+        message: <>
+          please click this button to switch right-network
+          <Button onClick={() => handleSwitchNetwork(setLoader)}>Switch Network</Button>
+        </>,
       });
       setLoader(false);
       return;
@@ -168,6 +186,39 @@ export const SetAuthContextProvider = (props) => {
           });
         }
       })
+  };
+
+  const handleSwitchNetwork = async (setLoader) => {
+    try {
+      setLoader(true);
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: "0xaa36a7", // Sepolia testnet chainId
+            chainName: "Sepolia Testnet",
+            nativeCurrency: {
+              name: "ETH",
+              symbol: "ETH",
+              decimals: 18,
+            },
+            rpcUrls: ["https://rpc2.sepolia.org"],
+            blockExplorerUrls: ["https://sepolia.etherscan.io"],
+          },
+        ],
+      });
+      setLoader(false);
+      setMessage({
+        type: "success",
+        message: "Switched to right network and Please login again!"
+      })
+    } catch (error) {
+      setLoader(false);
+      setMessage({
+        type: "error",
+        message: "Failed to switch network. Please switch manually in your wallet.",
+      });
+    }
   };
 
   const signOut = async () => {
