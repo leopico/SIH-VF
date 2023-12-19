@@ -69,7 +69,7 @@
   .containerinput{
     position: absolute;
     top: 0;
-    left: 15px;
+    left: -25px;
     right: 30px;
     width: 125%;
     height: 150%;

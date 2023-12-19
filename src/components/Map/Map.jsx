@@ -70,7 +70,7 @@ const ButtonContainer = styled.div`
 const Button = styled.div`
   width: 30px;
   height: 30px;
-  background: #387E9D;
+  background: white;
   padding: 1px;
   cursor: pointer;
   border-radius: 100%;
@@ -251,24 +251,24 @@ const Map = (props) => {
                                         <InfoRow>
                                             <InfoIcon src={seed} alt="Seed" />
                                             <InfoText>
-                                                SeedId: <strong>{selectedMarker.seedId.substring(0, 4) + "****" + selectedMarker.seedId.slice(-4)}</strong>
+                                                Cleaner's Id: <strong>{selectedMarker.seedId.substring(0, 4) + "****" + selectedMarker.seedId.slice(-4)}</strong>
                                             </InfoText>
                                         </InfoRow>
                                         <InfoRow>
                                             <InfoIcon src={ellipse} alt="Ellipse" />
-                                            <InfoText>Dies in: <strong>{selectedMarker.hrsToDie}</strong> &nbsp;hrs</InfoText>
+                                            <InfoText>Being Dirty Again in: <strong>{selectedMarker.hrsToDie}</strong> &nbsp;hrs</InfoText>
                                         </InfoRow>
                                         <InfoRow>
                                             <InfoIcon src={seed} alt="Seed" />
-                                            <InfoText>Stage: <strong>{selectedMarker.stage}</strong></InfoText>
+                                            <InfoText>Cleaniness Stage <strong>{selectedMarker.stage}</strong></InfoText>
                                         </InfoRow>
                                         <InfoRow>
                                             <InfoIcon src={clock} alt="clock" />
-                                            <InfoText>Seed alive: <strong>{selectedMarker.isDead ? "dead" : "alive"}</strong></InfoText>
+                                            <InfoText>Cleaned ? <strong>{selectedMarker.isDead ? "dead" : "alive"}</strong></InfoText>
                                         </InfoRow>
                                         <InfoRow>
                                             <InfoIcon src={clock} alt="clock" />
-                                            <InfoText>Seed age: <strong>{selectedMarker.age}</strong> days</InfoText>
+                                            <InfoText>Cleaning Duration <strong>{selectedMarker.age}</strong> days</InfoText>
                                         </InfoRow>
                                         <LocationInfo>
                                             <InfoIcon src={location} alt="Map" />

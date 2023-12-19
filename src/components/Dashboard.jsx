@@ -1,11 +1,9 @@
-<<<<<<< HEAD
+
 import styles from "./UserDashBoard.module.css";
 import styled from 'styled-components';
+// import { useState } from 'react';
 import { useState } from 'react';
-=======
-import { useState } from 'react';
-import styled from 'styled-components';
->>>>>>> 11b43b49d21b83f8546deb1a475734bf8872ab2d
+// import styled from 'styled-components';
 import NavBar from './NavBar';
 import { useContext } from 'react';
 import SetContractContext from '../context/SetContractContext';
@@ -23,9 +21,9 @@ const FlexDiv = styled.div`
     width: 100%;
   `;
 
-<<<<<<< HEAD
+
   const EditProfileModal = styled.div`
-  position: absolute; /* Change fixed to absolute */
+  position: fixed; /* Change fixed to absolute */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -39,19 +37,7 @@ const FlexDiv = styled.div`
 
 // ... rest of your code
 
-=======
-const EditProfileModal = styled.div`
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background-color: white;
-    border: 1px solid #ccc;
-    z-index: 1000;
-    width: 300px; /* Adjust the width as needed */
-  `;
->>>>>>> 11b43b49d21b83f8546deb1a475734bf8872ab2d
+
 
 const CloseButton = styled.button`
     position: absolute;
@@ -63,7 +49,6 @@ const EditButton = styled.button`
     margin-top: 10px;
   `;
 
-<<<<<<< HEAD
 
 function Dashboard (){
     
@@ -78,24 +63,11 @@ const [location, setLocation] = useState("");
 const [loader, setLoader] = useState(false);
 const profileId = user.profileId;
 
-const handleEditProfile = () => {
-=======
-function Dashboard() {
-  const { userDetails } = useContext(SetContractContext);
-  const { setMessage } = useContext(MessageContext);
-  const user = userDetails && userDetails.length > 0 ? userDetails[0] : {};
-  const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [career, setCareer] = useState("");
-  const [location, setLocation] = useState("");
-  const [loader, setLoader] = useState(false);
-  const profileId = user.profileId;
-  // console.log(profileId)
+
+
 
 
   const handleEditProfile = () => {
->>>>>>> 11b43b49d21b83f8546deb1a475734bf8872ab2d
     setIsEditing(true);
   };
 
@@ -143,13 +115,9 @@ function Dashboard() {
     }
   }
 
-  return (
-<<<<<<< HEAD
-    
+  return (  
     <>
      <NavBar />
-
-    
        <div className={styles.userdashboard}>
          <div className={styles.macbookAir1}>
            <div className={styles.path106Parent}>
@@ -329,33 +297,7 @@ function Dashboard() {
       />
     </div>
     </div>
-    {isEditing && (
-=======
-    <>
-      <NavBar />
-      <FlexDiv>
-        <div>
-          <h1>left side</h1>
-          <img src={profileImage} alt='profile' />
-          <p>level: {user.level}</p>
-          <p>trees: {user.treesGrown} trees</p>
-          <p>Friends: 0</p>
-          <p>Name: {user.name}</p>
-          <p>Email: {user.email}</p>
-          <p>Career: {user.career}</p>
-          <p>Location: {user.location}</p>
-          <button onClick={handleEditProfile}>Edit profile</button>
-        </div>
-        <div>
-          <h1>right side</h1>
-          <p>Total Trees: {user.treesGrown} trees</p>
-          <p>Current Stage: Garden</p>
-          <p>Next Stage: Orchard</p>
-        </div>
-      </FlexDiv>
-
       {isEditing && (
->>>>>>> 11b43b49d21b83f8546deb1a475734bf8872ab2d
         <EditProfileModal>
           <CloseButton onClick={handleCloseProfile}>X</CloseButton>
           <h2>Edit Profile</h2>
@@ -379,7 +321,7 @@ function Dashboard() {
             <input type="text" name='location' defaultValue={user.location} onChange={(e) => { setLocation(e.target.value) }} />
           </label>
           <br />
-<<<<<<< HEAD
+
           <EditButton style={
                 {
                 backgroundColor: '#00FF00',
@@ -391,23 +333,17 @@ function Dashboard() {
                 cursor: 'pointer',
               }
           }onClick={handleSaveProfile}>
-=======
-          <EditButton onClick={handleSaveProfile}>
->>>>>>> 11b43b49d21b83f8546deb1a475734bf8872ab2d
-            {
-              loader ? <Loader /> : "save"
-            }
+              
+              save
           </EditButton>
         </EditProfileModal>
       )}
     </>
   );
-<<<<<<< HEAD
 };
 
-export default Dashboard;
-=======
-}
+
+
 
 export default Dashboard;
->>>>>>> 11b43b49d21b83f8546deb1a475734bf8872ab2d
+

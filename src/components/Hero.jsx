@@ -4,6 +4,29 @@ import NavBar from "./NavBar";
 import About from "./About";
 import { Link } from "react-scroll";
 import SetAuthContext from "../context/SetAuthContext";
+import { useState } from "react";
+
+const EditProfileModal = styled.div`
+  position: fixed; /* Change fixed to absolute */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: lightgreen;
+  border: 10px solid green;
+  border-radius: 25px;
+  z-index: 1000;
+  font-size: 17px;
+  font-family: "inter", sans-serif;
+  font-weight: 500;
+  width: 300px;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
 
 const Section = styled.div`
   width: 100%;
@@ -158,6 +181,16 @@ const PlayNowButton = styled.button`
 
 function Hero() {
   const { addr } = useContext(SetAuthContext);
+  const [instruction, setInstruction] = useState(false);
+
+  const handleInstruction = () => {
+    setInstruction(true);
+    console.log("hello");
+  };
+
+  const handlecloseInstruction = () => {
+    setInstruction(false);
+  };
 
   return (
     <>
@@ -183,12 +216,31 @@ function Hero() {
               offset={-70}
               className="transition-all duration-300"
             >
-              <PlayNowButton>Play Now</PlayNowButton>
+              <PlayNowButton onClick={handleInstruction}>
+                Play Now
+              </PlayNowButton>
             </Link>
           </WriteFooter>
         </WriteWrapper>
       </Section>
       <About />
+      {instruction && (
+        <EditProfileModal>
+          <CloseButton onClick={handlecloseInstruction}>X</CloseButton>
+          <h2>🌱 Welcome to the Virtual Forest ! 🌳</h2>
+           
+          <li>Seed the Future: Click your chosen coordinates. Plant one seed daily from your seed bag.</li> 
+           <li>Care is Key: Water your seed once a day. Apply manure five times daily for
+          optimal growth. </li>
+          <li>Guardian Duties: Water daily; miss a day, and your seed may wither. 
+          Boost Growth: Manure accelerates growth.</li>
+           <li>
+           Watch it Bloom: Consistency unveils a tree symbol. Mint your tree when ready.
+          🌳
+           </li>
+          
+        </EditProfileModal>
+      )}
     </>
   );
 }

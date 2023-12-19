@@ -18,14 +18,12 @@ const NavHeader = styled.div`
 `;
 
 const NavLogo = styled.div`
-  width: 160px;
-  height: 100px;
+  width: 40px;
+  height: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  /* background-color: #cfc0c0; */
-  background-image: url("/logo.png");
+  background-image: url("/logo2.png");
 `;
 
 const NavElementWrapper = styled.div`
@@ -228,10 +226,10 @@ const NavBar = () => {
 
   return (
     <NavHeader>
-      <NavLogo></NavLogo>
+      <img src="/logo2.png" alt="Logo" style={{ width: "50px", height: "50px" , paddingLeft : "50px"}} />
       <NavElementWrapper>
-        <NavElement onClick={handleHome}>Home</NavElement>
-        <NavElement>About</NavElement>
+        <NavElement onClick={handleHome} className="button-86" role="button" >Home</NavElement>
+        <NavElement >About</NavElement>
         <NavElement>FAQs</NavElement>
         <NavElement>Contact</NavElement>
         <NavElement>Blog</NavElement>
