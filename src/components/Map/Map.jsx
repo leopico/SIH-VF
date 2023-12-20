@@ -251,7 +251,7 @@ const Map = (props) => {
                                         <InfoRow>
                                             <InfoIcon src={seed} alt="Seed" />
                                             <InfoText>
-                                                Cleaner's Id: <strong>{selectedMarker.seedId.substring(0, 4) + "****" + selectedMarker.seedId.slice(-4)}</strong>
+                                                Cleaner&#39;s Id: <strong>{selectedMarker.seedId.substring(0, 4) + "****" + selectedMarker.seedId.slice(-4)}</strong>
                                             </InfoText>
                                         </InfoRow>
                                         <InfoRow>
@@ -291,7 +291,7 @@ const Map = (props) => {
                                                     )
                                                 }
                                             >
-                                                <ButtonIcon src={waterbutton} alt="Water" />
+                                                <ButtonIcon src={waterbutton} alt="Water" /> 
                                             </Button>
                                             <Button
                                                 onClick={() =>
