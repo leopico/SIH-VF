@@ -16,7 +16,7 @@ const EditProfileModal = styled.div`
   border: 10px solid green;
   border-radius: 25px;
   z-index: 1000;
-  font-size: 17px;
+  font-size: 14px;
   font-family: "inter", sans-serif;
   font-weight: 500;
   width: 300px;
@@ -227,17 +227,36 @@ function Hero() {
       {instruction && (
         <EditProfileModal>
           <CloseButton onClick={handlecloseInstruction}>X</CloseButton>
-          <h2>🌱 Welcome to the Virtual Forest ! 🌳</h2>
+          <h2>🌐 Select Your Coordinates:</h2>
            
-          <li>Seed the Future: Click your chosen coordinates. Plant one seed daily from your seed bag.</li> 
-           <li>Care is Key: Water your seed once a day. Apply manure five times daily for
-          optimal growth. </li>
-          <li>Guardian Duties: Water daily; miss a day, and your seed may wither. 
-          Boost Growth: Manure accelerates growth.</li>
+          <li>Begin by choosing the specific location you want to clean up. Click on the map or enter the coordinates to kick off your mission.
+🧹 Start Cleaning:</li> 
+
+           <li>Once you&apos;ve selected your spot, it's time to get to work! Click on the sweep symbol to initiate the cleaning process. Watch as your area transforms from messy to marvelous!
+🚮 Place Disposal Bins:</li>
+
+          <li>To boost cleanliness, strategically place disposal bins around the area. Encourage proper waste disposal by giving your virtual citizens easy access to dispose of their trash.
+🌟 Enhance Sanitation:</li>
+
            <li>
-           Watch it Bloom: Consistency unveils a tree symbol. Mint your tree when ready.
-          🌳
+           Click on the sanitation symbol to take your cleaning efforts to the next level. Upgrade the hygiene standards of the area and ensure a healthier environment for everyone.
+🔄 Continuous Improvement:
            </li>
+
+            <li>
+            Remember, cleanliness is an ongoing process! Keep an eye on the cleanliness meter and continue sweeping, disposing, and sanitizing to maintain a sparkling clean environment.
+🏆 Achieve High Scores:
+            </li>
+
+            <li>
+            Challenge yourself to achieve the highest cleanliness score! Compete with friends or other players to see who can create the cleanest and most appealing virtual spaces.
+🌍 Become a Cleanliness Champion:
+            </li>
+
+            <li>
+            As you progress, unlock achievements and rise through the ranks to become the ultimate Cleanliness Champion. Your dedication to cleanliness will be recognized far and wide!
+Remember, a clean environment is a happy environment! Enjoy your journey to creating a spotless virtual world. 🌈🌟 
+            </li>
           
         </EditProfileModal>
       )}

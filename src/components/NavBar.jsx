@@ -154,14 +154,14 @@ const NavBar = () => {
 
 
 
-  async function handleDashboard() {
-    if (profileId) {
-      navigate("/Dashboard");
-    } else {
-      await handleAuth(setLoader);
-      navigate("/Dashboard");
-    }
-  }
+  // async function handleDashboard() {
+  //   if (profileId) {
+  //     navigate("/Dashboard");
+  //   } else {
+  //     await handleAuth(setLoader);
+  //     navigate("/Dashboard");
+  //   }
+  // }
 
   function handleHome() {
     navigate("/");
@@ -281,7 +281,7 @@ const NavBar = () => {
             </button>
           )}
         </ButtonConnect>
-        <UserLogo onClick={handleDashboard}>
+        <UserLogo onClick={() => alert('coming soon')}>
           <img src="/Avatar.svg" alt="Logo" />
         </UserLogo>
       </ExtraElementWarapper>
