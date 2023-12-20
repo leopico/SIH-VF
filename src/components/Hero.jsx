@@ -204,7 +204,7 @@ function Hero() {
           <WriteWallet>
             {addr ? `wallet connected: ${addr}` : "wallet not yet connected"}
           </WriteWallet>
-          <WriteTitle>Virtual Forest</WriteTitle>
+          <WriteTitle>CleanFun Haven</WriteTitle>
           {/* <WriteBody>NFTs and Conservation</WriteBody> */}
           <WriteFooter>
             <Link
